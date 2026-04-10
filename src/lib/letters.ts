@@ -26,14 +26,9 @@ let _cache: StaticLetter[] | null = null;
 export async function loadLetters(): Promise<StaticLetter[]> {
   if (_cache) return _cache;
 
-  // basePath is baked in at build time via next.config.js
-  const basePath =
-    process.env.NODE_ENV === "production"
-      ? `/${process.env.NEXT_PUBLIC_REPO_NAME || "letters-to-lions"}`
-      : "";
-
-  const res = await fetch(`${basePath}/letters.json`);
+  const res = await fetch("./letters.json");
   if (!res.ok) throw new Error("Failed to load letters");
+
   _cache = await res.json();
   return _cache!;
 }
