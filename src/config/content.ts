@@ -26,7 +26,7 @@ export const aboutContent = {
     },
     {
       title: "Why it exists",
-      body: "Because the transition to college is hard, and it helps to know you're not the first person to feel lost, overwhelmed, or unsure. These letters don't replace professional support — they're peer encouragement, written with care and reviewed with intention.",
+      body: "Because the transition to college is hard, and it helps to know you're not the first person to feel lost, overwhelmed, or unsure. While these letters don't replace professional support, they offer peer support and mutual care.",
     },
     {
       title: "Community values",
@@ -50,7 +50,7 @@ export const resourcesConfig = {
       description: "Columbia services available to all students.",
       urgent: false,
       resources: [
-        { name: "Counseling and Psychological Services (CPS)", description: "Free, confidential mental health support for Columbia students.", url: "https://health.columbia.edu/content/counseling-and-psychological-services", phone: "(212) 854-2878" },
+        { name: "Counseling and Psychological Services (CPS)", description: "Free, confidential mental health support for Columbia students.", url: "https://www.health.columbia.edu/content/individual-counseling", phone: "(212) 854-2878" },
         { name: "Columbia Health", description: "Primary care, wellness programs, immunizations, and health education.", url: "https://health.columbia.edu", phone: "(212) 854-2284" },
         { name: "Disability Services", description: "Accommodations and support for students with documented disabilities.", url: "https://health.columbia.edu/content/disability-services" },
       ],
@@ -60,8 +60,8 @@ export const resourcesConfig = {
       description: "Help with coursework, writing, advising, and academic skills.",
       urgent: false,
       resources: [
-        { name: "Columbia Writing Center", description: "Free one-on-one writing consultations for any assignment.", url: "https://www.college.columbia.edu/core/uwp/writing-center" },
-        { name: "Academic Resource Center", description: "Tutoring, study groups, academic coaching, and workshops.", url: "https://www.college.columbia.edu/academics/academicresourcecenter" },
+        { name: "Columbia Writing Center", description: "Free one-on-one writing consultations for any assignment.", url: "https://www.college.columbia.edu/core-curriculum/undergraduate-writing-program/writing-center" },
+        { name: "Academic Resource Center", description: "Tutoring, study groups, academic coaching, and workshops.", url: "https://www.gs.columbia.edu/content/academic-resource-center" },
       ],
     },
     {
@@ -71,7 +71,7 @@ export const resourcesConfig = {
       resources: [
         { name: "Multicultural Affairs", description: "Cultural programming, identity-based support, and community building.", url: "https://studentaffairs.columbia.edu/multicultural-affairs" },
         { name: "International Students and Scholars Office (ISSO)", description: "Immigration advising, programming, and support for international students.", url: "https://isso.columbia.edu" },
-        { name: "Columbia Chaplain's Office", description: "Interfaith programming and spiritual advising for all faiths and none.", url: "https://chaplain.columbia.edu" },
+        { name: "Columbia Chaplain's Office", description: "Interfaith programming and spiritual advising for all faiths and none.", url: "https://ouc.columbia.edu/" },
       ],
     },
     {
@@ -80,7 +80,7 @@ export const resourcesConfig = {
       urgent: true,
       resources: [
         { name: "988 Suicide & Crisis Lifeline", description: "Call or text 988, available 24/7.", phone: "988", url: "https://988lifeline.org" },
-        { name: "Columbia CPS Urgent Services", description: "Walk-in crisis support during business hours; after hours, call and press 2.", phone: "(212) 854-2878", url: "https://health.columbia.edu/content/counseling-and-psychological-services" },
+        { name: "Columbia Same Day Care", description: "Drop-in services and same-day support.", phone: "(212) 854-2878", url: "https://www.health.columbia.edu/content/same-day-care" },
         { name: "Columbia Public Safety", description: "24/7 campus safety and emergency response.", phone: "(212) 854-5555", url: "https://publicsafety.columbia.edu" },
         { name: "Crisis Text Line", description: "Text HOME to 741741 for free, 24/7 crisis support.", phone: "Text HOME to 741741", url: "https://www.crisistextline.org" },
       ],
