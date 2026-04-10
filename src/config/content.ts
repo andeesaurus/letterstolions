@@ -18,7 +18,7 @@ export const aboutContent = {
   sections: [
     {
       title: "What this is",
-      body: "This is a collection of real letters written by real Columbia students, alumni, and community members. They cover everything from homesickness and academic pressure to finding friends and discovering the city. Every letter is reviewed before it's published to ensure it meets our community standards.",
+      body: "This is a collection of real letters written by real Columbia students, alumni, and community members. They cover everything from homesickness and academic pressure to finding friends and discovering the city. Every letter is reviewed before it's published to ensure it meets our community standards. If you'd like to submit a letter, please forward it to asl2216@columbia.edu.",
     },
     {
       title: "Who it's for",
