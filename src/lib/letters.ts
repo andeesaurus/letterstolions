@@ -26,7 +26,7 @@ let _cache: StaticLetter[] | null = null;
 export async function loadLetters(): Promise<StaticLetter[]> {
   if (_cache) return _cache;
 
-  const res = await fetch("./letters.json");
+  const res = await fetch("/letterstolions/letters.json");
   if (!res.ok) throw new Error("Failed to load letters");
 
   _cache = await res.json();
