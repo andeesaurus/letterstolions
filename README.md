@@ -3,7 +3,7 @@
 A warm, editorial web platform where Columbia University students and alumni share supportive letters with incoming freshmen.
 
 **This is the static public demo** — a read-only version that runs entirely in the browser with no backend, database, or authentication required.
-
+Please click the link to see the demo: https://andeesaurus.github.io/letterstolions/
 ---
 
 ## Live Demo
