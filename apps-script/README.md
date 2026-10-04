@@ -62,7 +62,7 @@ If you change `Code.gs`, go to **Deploy → Manage deployments → ✏️ Edit �
 
 ## Instagram posts (optional)
 
-`Instagram.gs` makes an Instagram post from your Google Slides template each time a letter is set to **approved**. It saves a copy of the slides and a PNG of each slide into a Drive folder. The link goes in the letter's `post` column.
+`Instagram.gs` makes an Instagram post from your Google Slides template each time a letter is set to **approved**. Each post gets its own subfolder in your Drive folder, named `YYYY-MM-DD_<id>_<Title>` (e.g. `2026-10-05_ab12cd34_Take-it-slow`). Inside: `<name>_slides` and `<name>_01.png`, `_02.png`, …. The subfolder link goes in the letter's `post` column.
 
 **Setup:**
 1. In your Slides template, type placeholders where text should go, e.g. `{{pull}}` and `{{byline}}`. Full list at the top of `Instagram.gs`: `{{title}}`, `{{greeting}}`, `{{pull}}`, `{{body}}`, `{{p1}}`…`{{p9}}`, `{{author}}`, `{{byline}}`, `{{school}}`, `{{year}}`, `{{topic}}`.

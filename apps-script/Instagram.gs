@@ -4,8 +4,9 @@
  * When a letter's status is changed to "approved" in the Letters tab, this:
  *   1. copies your Google Slides template,
  *   2. fills in the {{placeholders}} with the letter's text,
- *   3. saves the copy (and a PNG of every slide) into your Drive folder,
- *   4. writes the folder link into the letter's "post" column.
+ *   3. makes a new subfolder in your Drive folder, named  YYYY-MM-DD_<id>_<title>
+ *      (e.g. 2026-10-05_ab12cd34_Take-it-slow), and saves the slides + a PNG per slide in it,
+ *   4. writes the subfolder link into the letter's "post" column.
  *
  * A letter gets a post only once. To regenerate it, clear its "post" cell and approve it again
  * (set status to pending, then approved).
@@ -29,9 +30,9 @@
 // ---- Settings: paste your IDs here -----------------------------------------
 
 // From the template's URL: docs.google.com/presentation/d/<THIS PART>/edit
-const IG_TEMPLATE_ID = '';
+const IG_TEMPLATE_ID = '1KAIi4r65c6dcwjRuCOUhyyxNTKPk3rL-W2Aox6f0jBs';
 // From the folder's URL: drive.google.com/drive/folders/<THIS PART>
-const IG_FOLDER_ID = '';
+const IG_FOLDER_ID = '1HoOp6JKgC7tXg_Vh8pkVQp_BBh_IP7w3';
 // Also save a PNG of each slide (ready to upload to Instagram).
 const IG_EXPORT_PNG = true;
 
@@ -78,9 +79,9 @@ function makeInstagramPost(sheet, row) {
 
   try {
     const fields = postFields(get);
-    const folder = DriveApp.getFolderById(IG_FOLDER_ID);
-    const name = (fields.title || 'Letter') + ' — ' + get('id');
-    const copy = DriveApp.getFileById(IG_TEMPLATE_ID).makeCopy(name, folder);
+    const name = postName(get('id'), fields.title);
+    const folder = DriveApp.getFolderById(IG_FOLDER_ID).createFolder(name);
+    const copy = DriveApp.getFileById(IG_TEMPLATE_ID).makeCopy(name + '_slides', folder);
 
     const deck = SlidesApp.openById(copy.getId());
     Object.keys(fields).filter(k => typeof fields[k] === 'string')
@@ -89,10 +90,18 @@ function makeInstagramPost(sheet, row) {
     deck.saveAndClose();
 
     if (IG_EXPORT_PNG) exportSlidesAsPng(copy.getId(), name, folder);
-    postCell.setValue(copy.getUrl());
+    postCell.setValue(folder.getUrl());
   } catch (err) {
     postCell.setValue('ERROR: ' + err.message + ' (clear this cell and re-approve to retry)');
   }
+}
+
+/** Standard name: YYYY-MM-DD_<letter id>_<Title-words> (date = day it was approved). */
+function postName(id, title) {
+  const date = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  const slug = String(title || 'Letter').normalize('NFKD').replace(/[^\w\s-]/g, '')
+    .trim().replace(/\s+/g, '-').slice(0, 40) || 'Letter';
+  return date + '_' + id + '_' + slug;
 }
 
 function postFields(get) {
@@ -122,7 +131,7 @@ function exportSlidesAsPng(presentationId, name, folder) {
     const url = 'https://docs.google.com/presentation/d/' + presentationId +
       '/export/png?pageid=' + slide.getObjectId();
     const blob = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + token } }).getBlob();
-    folder.createFile(blob.setName(name + (slides.length > 1 ? ' (' + (i + 1) + ')' : '') + '.png'));
+    folder.createFile(blob.setName(name + '_' + String(i + 1).padStart(2, '0') + '.png'));
   });
 }
 
