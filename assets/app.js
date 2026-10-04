@@ -303,6 +303,19 @@
     document.querySelector('[data-footer-nav]').innerHTML = html(false);
   }
 
+  // Mobile hamburger menu
+  const menuBtn = document.querySelector('[data-menu]');
+  const navEl = document.querySelector('[data-nav]');
+  function setMenu(open) {
+    navEl.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  menuBtn.addEventListener('click', () => setMenu(!navEl.classList.contains('open')));
+  navEl.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', e => { if (!e.target.closest('.site-header')) setMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && navEl.classList.contains('open')) { setMenu(false); menuBtn.focus(); } });
+
   function render() {
     const r = route();
     renderNav(r);

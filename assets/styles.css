@@ -62,6 +62,32 @@ main { flex: 1; }
 .nav a:hover { color: var(--ink); }
 .nav a[aria-current="page"] { background: var(--pale); color: var(--ink); }
 
+/* Mobile: hamburger menu, top right */
+.menu-btn { display: none; }
+@media (max-width: 640px) {
+  .header-inner { flex-wrap: nowrap; position: relative; }
+  .menu-btn {
+    display: inline-flex; flex-direction: column; justify-content: center; gap: 5px;
+    width: 44px; height: 44px; padding: 0 11px; margin-right: -11px;
+    border: none; background: none; cursor: pointer; border-radius: 999px;
+  }
+  .menu-btn:hover { background: var(--tint); }
+  .menu-btn span { display: block; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .2s, opacity .2s; }
+  .menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .nav {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: 2px;
+    padding: 8px 16px 16px; background: var(--bg);
+    border-bottom: 1px solid var(--line); box-shadow: 0 16px 24px -20px rgba(14, 44, 85, .35);
+  }
+  .nav.open { display: flex; }
+  /* Close off the values section with a rule, like the stacked sections above it */
+  .values { padding-bottom: 32px; border-bottom: 2px solid var(--action); }
+  .nav a { padding: 12px 14px; font-size: 17px; border-radius: 10px; }
+}
+
 /* ---------- Footer ---------- */
 .site-footer { background: #E6F0F7; border-top: 1px solid var(--line); }
 .footer-inner { padding-block: 44px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; }
