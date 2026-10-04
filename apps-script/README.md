@@ -62,19 +62,22 @@ If you change `Code.gs`, go to **Deploy → Manage deployments → ✏️ Edit �
 
 ## Instagram posts (optional)
 
-`Instagram.gs` makes an Instagram post from your Google Slides template each time a letter is set to **approved**. Each post gets its own subfolder in your Drive folder, named `YYYY-MM-DD_<id>_<Title>` (e.g. `2026-10-05_ab12cd34_Take-it-slow`). Inside: `<name>_slides` and `<name>_01.png`, `_02.png`, …. The subfolder link goes in the letter's `post` column.
+`Instagram.gs` turns each letter into an Instagram carousel when its status is set to **approved**. Status stays `approved`, so the letter stays on the website.
 
-**Setup:**
-1. In your Slides template, type placeholders where text should go, e.g. `{{pull}}` and `{{byline}}`. Full list at the top of `Instagram.gs`: `{{title}}`, `{{greeting}}`, `{{pull}}`, `{{body}}`, `{{p1}}`…`{{p9}}`, `{{author}}`, `{{byline}}`, `{{school}}`, `{{year}}`, `{{topic}}`.
-2. In Apps Script, click **+ → Script**, name it `Instagram`, and paste in `Instagram.gs`.
-3. Paste your IDs at the top:
-   - `IG_TEMPLATE_ID`: from the template URL, `docs.google.com/presentation/d/`**`ID`**`/edit`
-   - `IG_FOLDER_ID`: from the folder URL, `drive.google.com/drive/folders/`**`ID`**
-4. Save, choose **`setupInstagram`** in the function dropdown, click **Run**, and allow the new permissions (Slides, Drive).
+Each post gets its own subfolder in your Drive folder, named `YYYY-MM-DD_<id>_<Title>`. Inside are `<name>_slides` and `<name>_01.png`, `_02.png`, and so on. The subfolder link goes in the letter's `post` column.
 
-No redeploy is needed for this part. It runs inside the sheet, not the website.
+**Template: 2 slides**
+- Slide 1 is the first page. Slide 2 is the "next page", copied as many times as needed.
+- Put each placeholder in its own text box, styled the way the text should look:
+  - `{{body}}`: that page's part of the letter
+  - `{{title}}`: shrinks automatically when long
+  - `{{greeting}}`: the letter's own "Dear …," line, or "Dear Lion,"
+  - `{{name}}`: e.g. "Jo, SEAS ’27". Only kept on the last page.
+  - `{{page}}`: e.g. "2/3"
+  - `{{topic}}`
 
-**Notes:**
-- Each letter gets one post. To redo it, clear its `post` cell, then set status to `pending` and back to `approved`.
-- Text doesn't shrink to fit. Size your text boxes for long text, or use `{{pull}}` (short) instead of `{{body}}`.
-- If something fails, the `post` cell shows `ERROR: …`.
+**Setup:** in Apps Script, click **+ → Script**, name it `Instagram`, paste in `Instagram.gs`, save, then run **`setupInstagram`** and allow the permissions.
+
+**Tuning:** if text spills out of the box, lower `IG_CHARS_PER_LINE` or `IG_FIRST_LINES` / `IG_NEXT_LINES` at the top of the file. If pages end short, raise them.
+
+**Redo a post:** clear its `post` cell, then set status to `pending` and back to `approved`. Or run `exportRow(5)` in the editor, where 5 is the sheet row. If something fails, the `post` cell shows `ERROR: …`.
