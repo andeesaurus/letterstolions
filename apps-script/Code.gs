@@ -33,6 +33,7 @@ const TABS = {
   },
 };
 const LIMITS = { title: 100, name: 60, letter: 10000, letterTitle: 200, letterId: 40 };
+const MIN_WORDS = 50;
 const CACHE_KEY = 'approved-letters';
 const CACHE_SECONDS = 300;
 
@@ -88,6 +89,7 @@ function cleanLetter(d) {
     classYear: text(d.classYear, 10),
   };
   if (!r.title || !r.letter || !r.topic) return { error: 'missing required field' };
+  if (r.letter.split(/\s+/).filter(Boolean).length < MIN_WORDS) return { error: 'Minimum word count is ' + MIN_WORDS };
   if (TOPICS.indexOf(r.topic) < 0) return { error: 'unknown topic' };
   if (r.school && SCHOOLS.indexOf(r.school) < 0) r.school = 'Other';
   if (r.classYear && !/^(\d{4}|Other)$/.test(r.classYear)) r.classYear = '';
