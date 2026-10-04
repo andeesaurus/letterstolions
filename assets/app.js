@@ -149,10 +149,7 @@
         <div class="sheet back"></div>
         <div class="sheet middle"></div>
         <button class="front" data-open="${l ? esc(l.id) : ''}" ${l ? `aria-label="Read the letter: ${esc(l.title)}"` : 'disabled'}>
-          <div class="top">
-            <span class="eyebrow">${l ? esc(l.topic) : ''}</span>
-            ${l && l.school && l.year ? `<span class="stamp"><span>${esc(l.school)}<span>'${esc(l.year)}</span></span></span>` : ''}
-          </div>
+          ${l && l.school && l.year ? `<div class="top"><span class="stamp"><span>${esc(l.school)}<span>'${esc(l.year)}</span></span></span></div>` : ''}
           <p class="greeting">${l ? esc(l.greeting) : ''}</p>
           <p class="pull">${l ? esc(l.pull) : state.loadingSheet ? 'Loading letters…' : 'Letters are on their way.'}</p>
           ${l ? `<div class="bottom"><span>— ${esc(l.author)}</span><span class="read">Read →</span></div>` : ''}

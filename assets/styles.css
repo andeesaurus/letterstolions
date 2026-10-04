@@ -56,11 +56,11 @@ main { flex: 1; }
 .wordmark:hover { color: var(--ink); }
 .nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .nav a {
-  padding: 8px 14px; border-radius: 999px; white-space: nowrap;
+  padding: 8px 14px; white-space: nowrap;
   font-size: 15px; font-weight: 500; color: var(--text-2); text-decoration: none;
 }
 .nav a:hover { color: var(--ink); }
-.nav a[aria-current="page"] { background: var(--pale); color: var(--ink); }
+.nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
 
 /* Mobile: hamburger menu, top right */
 .menu-btn { display: none; }
@@ -85,7 +85,15 @@ main { flex: 1; }
   .nav.open { display: flex; }
   /* Close off the values section with a rule, like the stacked sections above it */
   .values { padding-bottom: 32px; border-bottom: 2px solid var(--action); }
-  .nav a { padding: 12px 14px; font-size: 17px; border-radius: 10px; }
+  .nav a { padding: 12px 14px; font-size: 17px; }
+
+  /* Smaller page titles, less space above, so more fits on screen */
+  .page-title { padding-block: 32px 24px; gap: 16px; }
+  .write { padding-block: 32px 72px; gap: 16px; }
+  .h1 { font-size: 40px; }
+  .intro { font-size: 18px; }
+  .hero { padding-block: 36px 64px; gap: 40px; }
+  .hero h1 { font-size: 48px; }
 }
 
 /* ---------- Footer ---------- */
@@ -138,7 +146,8 @@ main { flex: 1; }
 .stack .front:hover, .stack .front:focus-visible { transform: rotate(0deg) translateY(-4px); }
 .stack .front:focus-visible { outline: 2px solid var(--action); outline-offset: 4px; }
 .stack .front[disabled] { cursor: default; }
-.stack .top { display: flex; justify-content: space-between; align-items: flex-start; }
+.stack .top { display: flex; justify-content: flex-end; align-items: flex-start; }
+.stack .front > .greeting:first-child { margin-top: 0; }
 .stamp {
   width: 58px; height: 58px; border-radius: 50%; border: 1.5px dashed var(--stamp);
   display: grid; place-items: center; font-size: 11px; font-weight: 600; color: var(--mid);
