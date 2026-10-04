@@ -208,8 +208,11 @@
     const f = state.form, e = state.errors;
     const year = new Date().getFullYear();
     const years = Array.from({ length: 71 }, (_, i) => String(year + 35 - i)).concat('Other');
-    const opts = (list, val) => '<option value="">Select</option>' +
-      list.map(o => `<option value="${esc(o)}"${o === val ? ' selected' : ''}>${esc(o)}</option>`).join('');
+    const option = (o, val) => `<option value="${esc(o)}"${o === val ? ' selected' : ''}>${esc(o)}</option>`;
+    const opts = (list, val) => '<option value="">Select</option>' + list.map(o => option(o, val)).join('');
+    // Class: the blank "Select" sits just above the current year, so the list opens there
+    // (future years above, past years below) without pre-filling a year.
+    const yearOpts = val => years.map(o => (o === String(year) ? `<option value=""${val ? '' : ' selected'}>Select</option>` : '') + option(o, val)).join('');
     const field = (k, label, control, cls, counter) => `
       <label class="field ${cls || ''} ${e[k] ? 'invalid' : ''}" data-field="${k}">
         <span class="label">${label}</span>
@@ -235,7 +238,7 @@
           <label class="field"><span class="label">School <span class="opt">(optional)</span></span>
             <select name="school">${opts(SCHOOLS, f.school)}</select></label>
           <label class="field"><span class="label">Class <span class="opt">(optional)</span></span>
-            <select name="classYear">${opts(years, f.classYear)}</select></label>
+            <select name="classYear">${yearOpts(f.classYear)}</select></label>
         </div>
         <p class="helper">You can stay anonymous and leave any of these blank.</p>
         <div class="hp" aria-hidden="true"><label>Leave this empty <input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>

@@ -234,6 +234,8 @@ main { flex: 1; }
   border: 1px solid var(--light); border-radius: 6px; padding: 10px 14px; outline-color: var(--action); width: 100%;
 }
 .field select { padding: 10px 12px; line-height: normal; }
+/* Name box matches the dropdowns next to it */
+.field select, .optional-row input { height: 44px; padding-block: 0; line-height: normal; }
 .field textarea { resize: vertical; min-height: 220px; }
 .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--error); }
 .field-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
