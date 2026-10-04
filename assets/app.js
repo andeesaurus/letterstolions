@@ -73,12 +73,21 @@
     });
   }
 
+  const GREETING_RE = /^(dear|to|hi|hello|hey)\b.{0,40}[,:!]?$/i;
+
   function cleanLetter(l) {
-    const paras = Array.isArray(l.paras) ? l.paras.map(String).filter(Boolean) : [];
+    const paras = Array.isArray(l.paras) ? l.paras.map(s => String(s).trim()).filter(Boolean) : [];
+    let greeting = l.greeting || '', pull = l.pull || '';
+    // A short opening line like "Dear Freshmen," becomes the greeting instead of the first paragraph
+    if (paras.length > 1 && GREETING_RE.test(paras[0])) {
+      const opener = paras.shift();
+      if (!greeting) greeting = opener;
+      if (pull === opener) pull = '';
+    }
     return {
       id: l.id, topic: l.topic || 'Others', title: l.title || '', author: l.author || 'Anonymous',
-      school: l.school || '', year: l.year ? String(l.year) : '', greeting: l.greeting || '',
-      pull: l.pull || paras[0] || '', paras,
+      school: l.school || '', year: l.year ? String(l.year) : '', greeting,
+      pull: pull || paras[0] || '', paras,
     };
   }
 
