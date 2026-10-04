@@ -12,6 +12,7 @@
   ];
   const SCHOOLS = ['CC', 'SEAS', 'BC', 'GS', 'Other'];
   const EMPTY_FORM = { title: '', letter: '', topic: '', name: '', school: '', classYear: '', website: '' };
+  const MIN_WORDS = 50;
   const ERRORS = { title: 'Please add a title.', letter: 'Please write your letter.', topic: 'Please choose a topic.' };
 
   const state = {
@@ -342,7 +343,9 @@
   function validate() {
     const f = state.form, e = {};
     if (!f.title.trim()) e.title = ERRORS.title;
-    if (!f.letter.trim()) e.letter = ERRORS.letter;
+    const words = f.letter.trim().split(/\s+/).filter(Boolean).length;
+    if (!words) e.letter = ERRORS.letter;
+    else if (words < MIN_WORDS) e.letter = `Minimum word count is ${MIN_WORDS}. You have ${words}.`;
     if (!f.topic) e.topic = ERRORS.topic;
     return e;
   }
