@@ -13,7 +13,7 @@ index.html            page shell (header, footer)
 config.js             ← paste your Apps Script /exec URL here
 assets/styles.css     all styles (design tokens at the top)
 assets/app.js         routing, letter library, modal, form, feedback
-data/letters.json     hand-curated letters (approved sheet letters are added automatically)
+data/letters.json     optional hand-added letters (currently empty — approved sheet letters load automatically)
 data/topics.json      topic list (filters + form dropdown)
 data/about.json       About page copy
 data/resources.json   Find Help links

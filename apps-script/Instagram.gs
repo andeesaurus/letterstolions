@@ -9,7 +9,8 @@
  *   5. writes the subfolder link into the letter's "post" column.
  * Status stays "approved" so the letter stays on the website.
  *
- * A letter gets a post only once. To regenerate: clear its "post" cell, set status to pending, then approved.
+ * A letter gets a post only once. Setting status back to pending/rejected moves its folder to the Drive trash
+ * (recoverable for 30 days); approving again makes a fresh post. Deleted rows are cleaned up daily by cleanUpPosts.
  * Or run  exportRow(5)  from the editor (5 = sheet row number).
  *
  * TEMPLATE (2 slides):
@@ -47,9 +48,10 @@ function setupInstagram() {
   DriveApp.getFolderById(IG_FOLDER_ID); // checks access to the folder
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   ScriptApp.getProjectTriggers()
-    .filter(t => ['onApproveForInstagram', 'onStatusEdit'].indexOf(t.getHandlerFunction()) >= 0)
+    .filter(t => ['onApproveForInstagram', 'onStatusEdit', 'cleanUpPosts'].indexOf(t.getHandlerFunction()) >= 0)
     .forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('onApproveForInstagram').forSpreadsheet(ss).onEdit().create();
+  ScriptApp.newTrigger('cleanUpPosts').timeBased().everyDays(1).atHour(4).create();
   postColumn(ss.getSheetByName(TABS.letter.name));
 }
 
@@ -64,7 +66,50 @@ function onApproveForInstagram(e) {
   for (let row = Math.max(2, e.range.getRow()); row <= e.range.getLastRow(); row++) {
     const status = String(sheet.getRange(row, statusCol).getValue()).trim().toLowerCase();
     if (status === 'approved') exportRow(row);
+    else trashPost(sheet, row); // un-approved → move its post folder to the Drive trash
   }
+}
+
+/** Moves a row's post folder to the Drive trash (recoverable for 30 days) and clears the "post" cell. */
+function trashPost(sheet, row) {
+  const cell = sheet.getRange(row, postColumn(sheet));
+  const m = String(cell.getValue()).match(/\/folders\/([\w-]+)/);
+  if (!m) return;
+  try {
+    const folder = DriveApp.getFolderById(m[1]);
+    if (isPostFolder(folder)) folder.setTrashed(true);
+  } catch (err) { /* already gone */ }
+  cell.clearContent();
+}
+
+/**
+ * Trashes post folders whose letter is no longer approved — including letters whose row was deleted
+ * (deleting a row can't be detected the moment it happens). Runs daily; can also be run by hand.
+ */
+function cleanUpPosts() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TABS.letter.name);
+  const head = header(sheet);
+  const idCol = head.indexOf('id'), statusCol = head.indexOf('status');
+  const approved = new Set(sheet.getDataRange().getValues().slice(1)
+    .filter(r => String(r[statusCol]).trim().toLowerCase() === 'approved')
+    .map(r => String(r[idCol]).trim()));
+  const it = DriveApp.getFolderById(IG_FOLDER_ID).getFolders();
+  while (it.hasNext()) {
+    const f = it.next();
+    const m = f.getName().match(POST_NAME_RE);
+    if (m && !approved.has(m[1])) f.setTrashed(true);
+  }
+}
+
+// Folders this script made: YYYY-MM-DD_<8-char id>_<title>
+const POST_NAME_RE = /^\d{4}-\d{2}-\d{2}_([0-9a-f]{8})_/;
+
+/** Safety check: only touch folders this script created inside the Instagram folder. */
+function isPostFolder(folder) {
+  if (!POST_NAME_RE.test(folder.getName())) return false;
+  const parents = folder.getParents();
+  while (parents.hasNext()) if (parents.next().getId() === IG_FOLDER_ID) return true;
+  return false;
 }
 
 // ---- Export ----------------------------------------------------------------------

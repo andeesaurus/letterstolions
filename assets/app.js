@@ -20,7 +20,7 @@
   const ERRORS = { title: 'Please add a title.', letter: 'Please write your letter.', short: `Minimum word count is ${WORD_MIN}.`, long: `Please keep your letter under ${WORD_MAX} words.`, topic: 'Please choose a topic.' };
 
   const state = {
-    letters: [], topics: [], about: null, resources: [],
+    letters: [], localLetters: [], sheetLetters: [], loadingSheet: !!SHEET_URL, topics: [], about: null, resources: [],
     featuredId: null, topic: 'All', openId: null,
     form: { ...EMPTY_FORM }, errors: {}, attempted: false, submitting: false, sent: false, submitError: '',
     votes: readVotes(),
@@ -91,20 +91,27 @@
     };
   }
 
-  function loadSheetLetters() {
-    if (!SHEET_URL) return;
-    fetch(SHEET_URL + (SHEET_URL.includes('?') ? '&' : '?') + 'action=letters')
+  // Approved letters come from the Google Sheet, which is slow to answer (1–3 s).
+  // The last list is kept in this browser so returning visitors see it instantly; it's refreshed in the background.
+  const SHEET_CACHE_KEY = 'ltl-sheet-letters';
+
+  function fetchSheetLetters() {
+    if (!SHEET_URL) return Promise.resolve(null);
+    return fetch(SHEET_URL + (SHEET_URL.includes('?') ? '&' : '?') + 'action=letters')
       .then(r => r.json())
-      .then(res => {
-        if (!res || !Array.isArray(res.letters) || !res.letters.length) return;
-        const known = new Set(state.letters.map(l => String(l.id)));
-        const extra = res.letters.map(cleanLetter).filter(l => l.title && l.paras.length && !known.has(String(l.id)));
-        if (!extra.length) return;
-        state.letters = state.letters.concat(extra);
-        if (state.featuredId == null) pickFeatured();
-        if (['home', 'letters'].includes(route())) render();
-      })
-      .catch(err => console.warn('[Letters to Lions] Could not load letters from the sheet:', err));
+      .then(res => (res && Array.isArray(res.letters) ? res.letters : null))
+      .catch(err => { console.warn('[Letters to Lions] Could not load letters from the sheet:', err); return null; });
+  }
+
+  function readSheetCache() {
+    try { return JSON.parse(localStorage.getItem(SHEET_CACHE_KEY) || 'null'); } catch (e) { return null; }
+  }
+
+  function setSheetLetters(list) {
+    const local = new Set(state.localLetters.map(l => String(l.id)));
+    state.sheetLetters = list.map(cleanLetter).filter(l => l.title && l.paras.length && !local.has(String(l.id)));
+    state.letters = state.localLetters.concat(state.sheetLetters);
+    if (!findLetter(state.featuredId)) pickFeatured();
   }
 
   function pickFeatured() {
@@ -136,7 +143,7 @@
             ${l && l.school && l.year ? `<span class="stamp"><span>${esc(l.school)}<span>'${esc(l.year)}</span></span></span>` : ''}
           </div>
           <p class="greeting">${l ? esc(l.greeting) : ''}</p>
-          <p class="pull">${l ? esc(l.pull) : 'Letters are on their way.'}</p>
+          <p class="pull">${l ? esc(l.pull) : state.loadingSheet ? 'Loading letters…' : 'Letters are on their way.'}</p>
           ${l ? `<div class="bottom"><span>— ${esc(l.author)}</span><span class="read">Read →</span></div>` : ''}
         </button>
       </div>
@@ -155,7 +162,7 @@
         ${['All'].concat(state.topics).map(c => `<button class="chip" data-topic="${esc(c)}" aria-pressed="${c === t}">${esc(c)}</button>`).join('')}
       </div>
       <p class="count" aria-live="polite">${esc(label)}</p>
-      ${list.length ? '' : '<p class="empty">No letters here yet.</p>'}
+      ${list.length ? '' : `<p class="empty">${state.loadingSheet ? 'Loading letters…' : 'No letters here yet.'}</p>`}
       <div class="grid">
         ${list.map(x => { const l = norm(x); return `
         <button class="card" data-open="${esc(l.id)}">
@@ -476,17 +483,29 @@
   });
 
   // ---------- boot ----------
+  const sheetRequest = fetchSheetLetters(); // start right away, in parallel with the local files
+
   Promise.all([
     getJSON('data/letters.json'), getJSON('data/topics.json'),
     getJSON('data/about.json'), getJSON('data/resources.json'),
   ]).then(([letters, topics, about, resources]) => {
-    state.letters = letters.map(cleanLetter).filter(l => l.title && l.paras.length);
+    state.localLetters = letters.map(cleanLetter).filter(l => l.title && l.paras.length);
     state.topics = topics;
     state.about = about;
     state.resources = resources;
-    pickFeatured();
+    const cached = readSheetCache();
+    if (cached) state.loadingSheet = false;
+    setSheetLetters(cached || []);
     render();
-    loadSheetLetters();
+
+    sheetRequest.then(list => {
+      state.loadingSheet = false;
+      if (list) {
+        try { localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(list)); } catch (e) { /* storage full or blocked */ }
+        setSheetLetters(list);
+      }
+      if (['home', 'letters'].includes(route())) render();
+    });
   }).catch(err => {
     console.error(err);
     main.innerHTML = '<section class="wrap page-title"><p class="intro">Sorry — the site could not load. Please refresh the page.</p></section>';
