@@ -201,10 +201,15 @@ function letterData(get) {
   const paras = get('letter').split(/\n+/).map(s => s.trim()).filter(Boolean);
   // Use the letter's own opening line ("Dear …," / "To …," / "Hi …,") as the greeting
   let greeting = get('greeting') || IG_DEFAULT_GREETING;
-  if (paras.length > 1 && /^(dear|to|hi|hello|hey)\b.{0,40}[,:!]?$/i.test(paras[0])) {
-    const opener = paras.shift();
-    if (!get('greeting')) greeting = opener;
+  let opener = '';
+  if (paras.length > 1 && /^(dear|to|hi|hello|hey)\b[^,.!?\n]{0,30}[,:!]?$/i.test(paras[0])) {
+    opener = paras.shift();
+  } else if (paras.length) {
+    // Greeting run into the first sentence: "Dear Freshmen,These next…"
+    const m = paras[0].match(/^((?:dear|hi|hello|hey)\b[^,\n.!?]{0,30},)\s*(\S[\s\S]*)$/i);
+    if (m) { opener = m[1]; paras[0] = m[2].charAt(0).toUpperCase() + m[2].slice(1); }
   }
+  if (opener && !get('greeting')) greeting = opener;
   const school = get('school') === 'Other' ? '' : get('school');
   const year = /^\d{4}$/.test(get('classYear')) ? '’' + get('classYear').slice(2) : '';
   const tag = [school, year].filter(Boolean).join(' ');

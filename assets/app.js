@@ -73,16 +73,27 @@
     });
   }
 
-  const GREETING_RE = /^(dear|to|hi|hello|hey)\b.{0,40}[,:!]?$/i;
+  // Greeting on its own line ("Dear Freshmen,") or run into the first sentence ("Dear Freshmen,These next…")
+  const GREETING_LINE_RE = /^(dear|to|hi|hello|hey)\b[^,.!?\n]{0,30}[,:!]?$/i;
+  const GREETING_INLINE_RE = /^((?:dear|hi|hello|hey)\b[^,\n.!?]{0,30},)\s*(\S[\s\S]*)$/i;
+
+  function splitGreeting(paras) {
+    if (paras.length > 1 && GREETING_LINE_RE.test(paras[0])) return paras.shift();
+    const m = paras.length ? paras[0].match(GREETING_INLINE_RE) : null;
+    if (!m) return '';
+    paras[0] = m[2].charAt(0).toUpperCase() + m[2].slice(1);
+    return m[1];
+  }
 
   function cleanLetter(l) {
     const paras = Array.isArray(l.paras) ? l.paras.map(s => String(s).trim()).filter(Boolean) : [];
+    const firstPara = paras[0];
     let greeting = l.greeting || '', pull = l.pull || '';
-    // A short opening line like "Dear Freshmen," becomes the greeting instead of the first paragraph
-    if (paras.length > 1 && GREETING_RE.test(paras[0])) {
-      const opener = paras.shift();
+    // The letter's own opening line becomes the greeting instead of part of the first paragraph
+    const opener = splitGreeting(paras);
+    if (opener) {
       if (!greeting) greeting = opener;
-      if (pull === opener) pull = '';
+      if (pull === opener || pull === firstPara) pull = '';
     }
     return {
       id: l.id, topic: l.topic || 'Others', title: l.title || '', author: l.author || 'Anonymous',
