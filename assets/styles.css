@@ -202,7 +202,7 @@ main { flex: 1; }
 .field select { padding: 10px 12px; line-height: normal; }
 .field textarea { resize: vertical; min-height: 220px; }
 .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--error); }
-.word-count { font-size: 14px; color: var(--muted); }
+.word-count { align-self: flex-end; font-size: 14px; color: var(--muted); }
 .word-count.bad { color: var(--error); }
 .field .error { font-size: 14px; color: var(--error); }
 .field .error:empty { display: none; }
