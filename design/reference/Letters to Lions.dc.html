@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&amp;family=Hanken+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F8FB;color:#14263F;font-family:'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#1D4F91;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:#0E2C55}
+button{font-family:inherit}
+@keyframes ltlFade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#F4F8FB">
+
+<header style="position:sticky;top:0;z-index:20;background:rgba(244,248,251,0.92);backdrop-filter:blur(10px);border-bottom:1px solid #DCE8F1">
+  <div style="max-width:1200px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <button onClick="{{ goHome }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px">
+      
+      <span style="font-family:'Newsreader',serif;font-size:21px;letter-spacing:-0.01em;color:#0E2C55">Letters to Lions</span>
+    </button>
+    <nav style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+        <button onClick="{{ n.go }}" style="border:none;background:{{ n.bg }};color:{{ n.color }};padding:8px 14px;border-radius:999px;white-space:nowrap;font-size:15px;font-weight:500;cursor:pointer">{{ n.label }}</button>
+      </sc-for>
+    </nav>
+  </div>
+</header>
+
+<main style="flex:1">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <section style="max-width:1200px;margin:0 auto;padding:72px 28px 88px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:56px;align-items:center">
+    <div>
+      <h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(52px,7.4vw,96px);line-height:0.98;letter-spacing:-0.025em;color:#0E2C55">You're not<br><em style="color:#3A6EA5">alone</em> in this.</h1>
+      <p style="margin:28px 0 0;max-width:30em;font-size:19px;line-height:1.55;color:#33496A;text-wrap:pretty">Letters from Columbia students and alumni to incoming freshmen.&nbsp;</p>
+      <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap">
+        <button onClick="{{ goLetters }}" style="border:none;background:none;color:#1D4F91;font-size:16px;font-weight:500;cursor:pointer;padding:0;white-space:nowrap">Read More Letters →</button>
+      </div>
+    </div>
+    <div style="position:relative;height:460px;max-width:520px;width:100%;justify-self:center">
+      <div style="position:absolute;inset:40px 30px 0 60px;background:#B9D9EB;border-radius:6px;transform:rotate(6deg)"></div>
+      <div style="position:absolute;inset:20px 50px 20px 30px;background:#DCEBF5;border-radius:6px;transform:rotate(-4deg)"></div>
+      <button onClick="{{ openFeatured }}" style="all:unset;cursor:pointer;position:absolute;inset:0 40px 40px 40px;background:#FFFFFF;border-radius:6px;box-shadow:0 30px 60px -30px rgba(14,44,85,0.35),0 0 0 1px #E3EDF4;padding:40px 38px;display:flex;flex-direction:column;transform:rotate(-1deg)" style-hover="transform:rotate(0deg) translateY(-4px)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <span style="font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3A6EA5">{{ featured.topic }}</span>
+          <sc-if value="{{ featured.hasTag }}" hint-placeholder-val="{{ true }}"><span style="width:58px;height:58px;border-radius:50%;border:1.5px dashed #6C9BC8;display:grid;place-items:center;font-size:11px;font-weight:600;color:#3A6EA5;letter-spacing:0.04em;text-align:center;line-height:1.15"><span>{{ featured.school }}<span style="display:block;white-space:nowrap">'{{ featured.year }}</span></span></span></sc-if>
+        </div>
+        <p style="margin:18px 0 0;font-family:'Newsreader',serif;font-size:19px;color:#5A7192">{{ featured.greeting }}</p>
+        <p style="margin:12px 0 0;font-family:'Newsreader',serif;font-size:26px;line-height:1.3;color:#0E2C55;text-wrap:pretty;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;overflow:hidden">{{ featured.pull }}</p>
+        <sc-if value="{{ hasLetters }}" hint-placeholder-val="{{ true }}"><div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:15px;color:#33496A">
+          <span>— {{ featured.author }}</span>
+          <span style="color:#1D4F91;font-weight:500">Read →</span>
+        </div></sc-if>
+      </button>
+    </div>
+  </section>
+
+
+
+
+</sc-if>
+
+<sc-if value="{{ isLetters }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1200px;margin:0 auto;padding:64px 28px 96px">
+    <h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(48px,6vw,80px);line-height:1;letter-spacing:-0.025em;color:#0E2C55">Read More Letters</h1>
+    
+    
+    <div style="margin-top:48px"><h2 style="margin: 0 0 20px; font-family: 'Newsreader',serif; font-weight: 400; font-size: 30px; line-height: 1.1; letter-spacing: -0.015em; color: #0E2C55">Find a letter for <em style="color:#3A6EA5">what’s on your mind</em> today.</h2></div>
+    <div style="padding-bottom:24px;border-bottom:1px solid #DCE8F1;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <sc-for list="{{ filterChips }}" as="c" hint-placeholder-count="6">
+          <button onClick="{{ c.go }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};padding:9px 16px;border-radius:999px;white-space:nowrap;font-size:15px;font-weight:500;cursor:pointer">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <button onClick="{{ openRandom }}" style="border:none;background:none;color:#1D4F91;font-size:15px;font-weight:500;cursor:pointer;padding:0"></button>
+    </div>
+    <p style="margin:20px 0 28px;font-size:15px;color:#5A7192">{{ filteredLabel }}</p>
+    <sc-if value="{{ noneFiltered }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 28px;font-size:18px;color:#33496A">No letters here yet.</p></sc-if>
+    <div style="display:grid;grid-template-columns:{{ gridCols }};gap:20px">
+      <sc-for list="{{ filtered }}" as="l" hint-placeholder-count="6">
+        <button onClick="{{ l.open }}" style="all:unset;cursor:pointer;background:#fff;border-radius:6px;box-shadow:0 0 0 1px #E3EDF4;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:280px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-4px);box-shadow:0 0 0 1px #B9D9EB,0 24px 40px -28px rgba(14,44,85,0.4)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3A6EA5;background:#EAF3F9;padding:5px 10px;border-radius:999px">{{ l.topic }}</span>
+            <span style="font-size:13px;color:#5A7192;white-space:nowrap">{{ l.tag }}</span>
+          </div>
+          <h3 style="margin:4px 0 0;font-family:'Newsreader',serif;font-weight:400;font-size:26px;line-height:1.2;color:#0E2C55;text-wrap:pretty">{{ l.title }}</h3>
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#33496A;text-wrap:pretty">{{ l.excerpt }}</p>
+          <div style="margin-top:auto;display:flex;justify-content:space-between;font-size:15px;color:#5A7192"><span>— {{ l.author }}</span><span>{{ l.mins }} min read</span></div>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1200px;margin:0 auto;padding:64px 28px 40px;display:flex;flex-direction:column;gap:24px">
+    <h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(48px,6vw,80px);line-height:1;letter-spacing:-0.025em;color:#0E2C55">About Letters to Lions</h1>
+    <p style="margin:0;max-width:38em;font-size:20px;line-height:1.55;color:#33496A;text-wrap:pretty">College life can be overwhelming, and sometimes the most helpful thing is hearing from someone who's been there.</p>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:48px 28px 96px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px 36px">
+      <sc-for list="{{ aboutBasics }}" as="a" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:2px solid #1D4F91">
+          <span style="font-size:14px;font-weight:600;letter-spacing:0.08em;color:#3A6EA5">{{ a.num }}</span>
+          <h2 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:32px;line-height:1.1;color:#0E2C55">{{ a.title }}</h2>
+          <p style="margin:0;font-size:17px;line-height:1.65;color:#33496A;text-wrap:pretty">{{ a.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ hasValuesBlock }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:72px;padding-top:24px;border-top:2px solid #1D4F91;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-size:14px;font-weight:600;letter-spacing:0.08em;color:#3A6EA5">{{ valuesBlock.num }}</span>
+          <h2 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:32px;line-height:1.1;color:#0E2C55">{{ valuesBlock.title }}</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px 36px">
+          <sc-for list="{{ valuesBlock.values }}" as="v" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:17px;font-weight:700;line-height:1.65;color:#0E2C55">{{ v.name }}</span>
+              <span style="font-size:17px;line-height:1.65;color:#33496A;text-wrap:pretty">{{ v.desc }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <div style="margin-top:120px;background:#DCEBF5;border-radius:10px;padding:clamp(32px,5vw,52px) clamp(28px,5vw,56px);display:flex;flex-direction:column;gap:16px">
+      <h2 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:32px;line-height:1.1;color:#0E2C55">Important Note</h2>
+      <p style="margin:0;max-width:44em;font-size:18px;line-height:1.7;color:#14263F;text-wrap:pretty">Letters to Lions is a peer support platform, not a crisis service. If you are experiencing a mental health emergency, please contact Columbia Counseling and Psychological Services at <strong style="color:#0E2C55;font-weight:700">(212) 854-2878</strong> or call <strong style="color:#0E2C55;font-weight:700">988</strong> (Suicide &amp; Crisis Lifeline). If you are in immediate danger, call <strong style="color:#0E2C55;font-weight:700">911</strong> or Columbia Public Safety at <strong style="color:#0E2C55;font-weight:700">(212) 854-5555</strong>.</p>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ isResources }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1200px;margin:0 auto;padding:64px 28px 40px;display:flex;flex-direction:column;gap:24px">
+    <h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(48px,6vw,80px);line-height:1;letter-spacing:-0.025em;color:#0E2C55">Find Help</h1>
+    <p style="margin:0;max-width:38em;font-size:20px;line-height:1.55;color:#33496A;text-wrap:pretty">Starting at Columbia means navigating a whole new chapter of life. These resources are here to support you through all of it.</p>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:56px 28px 96px;display:flex;flex-direction:column;gap:56px">
+    <sc-for list="{{ resourceGroups }}" as="g" hint-placeholder-count="4">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:30px;color:#0E2C55">{{ g.title }}</h2>
+          <sc-if value="{{ g.note }}" hint-placeholder-val="{{ false }}"><p style="margin:14px 0 0;font-size:16px;line-height:1.5;color:#0E2C55;background:#DCEBF5;padding:10px 16px;border-radius:6px">{{ g.note }}</p></sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ g.items }}" as="r" hint-placeholder-count="3">
+            <a href="{{ r.href }}" target="_blank" rel="noopener" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;padding:20px 0;border-top:1px solid #DCE8F1;text-decoration:none;color:#14263F" style-hover="background:#EAF3F9">
+              <span style="font-size:18px;font-weight:600;color:#0E2C55">{{ r.name }}</span>
+              <span style="font-size:15px;font-weight:500;color:#1D4F91;white-space:nowrap">Visit ↗</span>
+              <span style="font-size:16px;line-height:1.5;color:#33496A">{{ r.desc }}</span>
+              <sc-if value="{{ r.phone }}" hint-placeholder-val="{{ false }}"><span style="grid-column:1;font-size:15px;color:#5A7192">Phone: {{ r.phone }}</span></sc-if>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+</sc-if>
+
+<sc-if value="{{ isSubmit }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1200px;margin:0 auto;padding:64px 28px 96px;display:flex;flex-direction:column;gap:24px">
+    <h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(48px,6vw,80px);line-height:1;letter-spacing:-0.025em;color:#0E2C55">Write a Letter</h1>
+    <p style="margin:0;max-width:38em;font-size:20px;line-height:1.55;color:#33496A;text-wrap:pretty">Write something to support your peers. What would you tell your freshman self?</p>
+    <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+      <form noValidate="{{ true }}" onSubmit="{{ submit }}" style="margin-top:24px;max-width:760px;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #DCE8F1;border-radius:10px;padding:clamp(20px,4vw,36px);display:flex;flex-direction:column;gap:24px">
+        <label style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:14px;font-weight:600;color:#0E2C55">Title</span>
+          <input name="title" required="{{ true }}" type="text" maxlength="100" value="{{ form.title }}" onChange="{{ onTitle }}" placeholder="{{ titlePh }}" onFocus="{{ focusTitle }}" onBlur="{{ blurField }}" style="font:inherit;font-size:16px;line-height:1.6;color:#14263F;border:1px solid {{ border.title }};border-radius:6px;padding:10px 14px;outline-color:#1D4F91">
+          <sc-if value="{{ errors.title }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:#A23B2A">{{ errors.title }}</span></sc-if>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:14px;font-weight:600;color:#0E2C55">Letter</span>
+          <textarea name="letter" required="{{ true }}" value="{{ form.letter }}" onChange="{{ onLetter }}" placeholder="{{ letterPh }}" onFocus="{{ focusLetter }}" onBlur="{{ blurField }}" rows="10" style="font:inherit;font-size:16px;line-height:1.6;color:#14263F;border:1px solid {{ border.letter }};border-radius:6px;padding:10px 14px;resize:vertical;min-height:220px;outline-color:#1D4F91"></textarea>
+          <sc-if value="{{ errors.letter }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:#A23B2A">{{ errors.letter }}</span></sc-if>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;max-width:320px">
+          <span style="font-size:14px;font-weight:600;color:#0E2C55">Topic</span>
+          <select name="topic" required="{{ true }}" value="{{ form.topic }}" onChange="{{ onTopic }}" style="font:inherit;font-size:16px;color:#14263F;background:#fff;border:1px solid {{ border.topic }};border-radius:6px;padding:10px 12px;outline-color:#1D4F91">
+            <option value="">Select</option>
+            <sc-for list="{{ formTopics }}" as="t" hint-placeholder-count="0">
+              <option value="{{ t }}">{{ t }}</option>
+            </sc-for>
+          </select>
+          <sc-if value="{{ errors.topic }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:#A23B2A">{{ errors.topic }}</span></sc-if>
+        </label>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px">
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:14px;font-weight:600;color:#0E2C55">Name <span style="font-weight:400;color:#5A7192">(optional)</span></span>
+            <input name="name" type="text" maxlength="60" value="{{ form.name }}" onChange="{{ onName }}" style="font:inherit;font-size:16px;color:#14263F;border:1px solid #B9D9EB;border-radius:6px;padding:10px 12px;outline-color:#1D4F91">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:14px;font-weight:600;color:#0E2C55">School <span style="font-weight:400;color:#5A7192">(optional)</span></span>
+            <select name="school" value="{{ form.school }}" onChange="{{ onSchool }}" style="font:inherit;font-size:16px;color:#14263F;background:#fff;border:1px solid #B9D9EB;border-radius:6px;padding:10px 12px;outline-color:#1D4F91">
+              <option value="">Select</option>
+              <option value="CC">CC</option>
+              <option value="SEAS">SEAS</option>
+              <option value="BC">BC</option>
+              <option value="GS">GS</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:14px;font-weight:600;color:#0E2C55">Class <span style="font-weight:400;color:#5A7192">(optional)</span></span>
+            <select name="classYear" value="{{ form.classYear }}" onChange="{{ onClass }}" style="font:inherit;font-size:16px;color:#14263F;background:#fff;border:1px solid #B9D9EB;border-radius:6px;padding:10px 12px;outline-color:#1D4F91">
+              <option value="">Select</option>
+              <sc-for list="{{ classYears }}" as="y" hint-placeholder-count="0">
+                <option value="{{ y }}">{{ y }}</option>
+              </sc-for>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+        </div>
+        <p style="margin:-8px 0 0;font-size:15px;color:#5A7192">You can stay anonymous and leave any of these blank.</p>
+        <div style="display:flex;justify-content:flex-end">
+          <button type="submit" style="border:none;background:#1D4F91;color:#fff;padding:12px 28px;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#0E2C55">Submit</button>
+        </div>
+      </form>
+    </sc-if>
+    <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:24px;max-width:760px;width:100%;position:relative;padding:18px 18px 28px">
+        <div style="position:absolute;inset:26px 10px 8px 34px;background:#B9D9EB;border-radius:10px;transform:rotate(2.5deg)"></div>
+        <div style="position:absolute;inset:14px 28px 18px 8px;background:#DCEBF5;border-radius:10px;transform:rotate(-1.8deg)"></div>
+        <div style="position:relative;background:#FFFFFF;border-radius:10px;box-shadow:0 30px 60px -34px rgba(14,44,85,0.35),0 0 0 1px #E3EDF4;padding:clamp(36px,6vw,64px) clamp(24px,5vw,56px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px">
+          <span style="font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#3A6EA5">Letter sent</span>
+          <p style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(34px,4.4vw,48px);line-height:1.1;letter-spacing:-0.02em;color:#0E2C55;text-wrap:balance">Thank you for <em style="color:#3A6EA5">your letter.</em></p>
+          <p style="margin:0;max-width:30em;font-size:17px;line-height:1.6;color:#33496A;text-wrap:pretty">Your words might be exactly what a fellow Lion needs to hear.</p>
+          <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+            <button onClick="{{ goLetters }}" style="border:none;background:#1D4F91;color:#fff;padding:12px 26px;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#0E2C55">Read Letters</button>
+            <button onClick="{{ resetForm }}" style="border:1px solid #B9D9EB;background:#fff;color:#0E2C55;padding:12px 26px;border-radius:999px;font-size:16px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#EAF3F9">Write Another</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+</sc-if>
+
+</main>
+
+<footer style="background:#E6F0F7;border-top:1px solid #DCE8F1">
+  <div style="max-width:1200px;margin:0 auto;padding:44px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:28px">
+    <div>
+      
+    </div>
+    
+    <div style="grid-column:1/-1;padding-top:24px;border-top:1px solid #D2E2EE;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+          <button onClick="{{ n.go }}" style="border:none;background:none;color:#1D4F91;padding:6px 10px;font-size:15px;cursor:pointer;white-space:nowrap">{{ n.label }}</button>
+        </sc-for>
+      </div>
+      <p style="margin:0;font-size:15px;color:#33496A">Letters to Lions · A Columbia community project</p>
+    </div>
+  </div>
+</footer>
+
+<sc-if value="{{ hasOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ close }}" style="position:fixed;inset:0;z-index:50;background:rgba(14,44,85,0.55);backdrop-filter:blur(4px);overflow-y:auto;overflow-x:hidden;padding:48px 20px">
+    
+  <article onClick="{{ stop }}" style="max-width:680px;margin:0 auto;background:{{ paperBg }};border-radius:6px;box-shadow:0 40px 80px -30px rgba(0,0,0,0.5);padding:clamp(32px,6vw,64px);position:relative;animation:ltlFade .35s ease">
+      <button onClick="{{ close }}" style="position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;border:1px solid #DCE8F1;background:#fff;color:#0E2C55;font-size:20px;cursor:pointer;line-height:1">×</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding-right:48px">
+        
+        
+      </div>
+      <h2 style="margin:28px 0 0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(32px,4vw,42px);line-height:1.12;letter-spacing:-0.015em;color:#0E2C55;text-wrap:pretty">{{ open.title }}</h2>
+      <div style="margin-top:28px;font-family:'Newsreader',serif;font-size:21px;line-height:1.6;color:#1E3352">
+        <p style="margin:0 0 18px;color:#5A7192">{{ open.greeting }}</p>
+        <sc-for list="{{ open.paras }}" as="p" hint-placeholder-count="3">
+          <p style="margin:0 0 18px;text-wrap:pretty">{{ p }}</p>
+        </sc-for>
+        <p style="margin:28px 0 0;font-style:italic">— {{ open.byline }}</p>
+      </div>
+      <div style="margin-top:44px;padding-top:25px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        
+        
+        
+      </div><button onClick="{{ next }}" style="border: none; background: #1D4F91; color: #fff; padding: 11px 18px; border-radius: 999px; white-space: nowrap; font-size: 15px; font-weight: 500; cursor: pointer; width: 205px; text-align: center; height: 44px; display: block; margin: 0 auto">Read another letter</button>
+      <div style="margin-top:32px;padding-top:24px;border-top:1px solid #DCE8F1;display:flex;flex-direction:column;align-items:center;gap:12px">
+        <sc-if value="{{ notVoted }}" hint-placeholder-val="{{ true }}">
+          <span style="font-size:16px;color:#33496A">Did this letter help?</span>
+          <div style="display:flex;gap:10px">
+            <button onClick="{{ voteYes }}" style="border:1px solid #B9D9EB;background:#fff;color:#0E2C55;padding:9px 20px;border-radius:999px;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#EAF3F9">Yes</button>
+            <button onClick="{{ voteNo }}" style="border:1px solid #B9D9EB;background:#fff;color:#0E2C55;padding:9px 20px;border-radius:999px;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#EAF3F9">Not really</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ voted }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:16px;color:#33496A">Thanks for letting us know.</span>
+        </sc-if>
+      </div>
+    </article></div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;paperLines&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Letters&quot;},&quot;gridColumns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[2,3,4],&quot;default&quot;:3,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Letters&quot;}}">
+const LETTERS = [
+ // Add letters here, one per entry. topic must match one of TOPICS exactly. Example:
+ // {id:1,topic:'Academics',school:'CC',year:'27',author:'Anonymous',title:'Letter title',pull:'One-sentence quote shown on the home card.',
+ //  paras:['First paragraph.','Second paragraph.']},
+ // Optional: greeting:'Dear Freshmen,' (defaults to 'Dear Lion,'). Leave school/year '' if unknown.
+ {id:1,topic:'Others',school:'',year:'',author:'Anonymous',greeting:'Dear Freshmen,',title:'Take your time',pull:'Be patient, take things one step at a time, and don’t take yourself or the moment too seriously. Think about the long-term, but don’t forget to be present.',
+  paras:['These next several years will feel like a blur when they’re over. The past 4 years have flown by and moved at a snail’s pace. I’ve cycled through life plans and day plans, each of them seeming at one point like they must happen and at another moment like they’re impossible.','Take your time, collect yourself, and recognize that you cannot and will not find a solution to all of the questions and issues you face in one fell-swoop. Be patient, take things one step at a time, and don’t take yourself or the moment too seriously. Think about the long-term, but don’t forget to be present. ♡']},
+ {id:2,topic:'Others',school:'',year:'',author:'Em',greeting:'Dear Freshmen,',title:'It’s not that deep',pull:'Trust the universe and everything will work out the way that you want it to. The universe rewards good energy.',
+  paras:['Whatever you are worried about, it’s not that deep. Fuck it, have experiences, go follow your heart. Do what you want. Trust the universe and everything will work out the way that you want it to.','The universe rewards good energy. You will receive whatever you put out into it.','With love,']},
+];
+const norm = l => { const tag = [l.school, l.year ? '\'' + l.year : ''].filter(Boolean).join(' '); return { ...l, greeting: l.greeting || 'Dear Lion,', tag, hasTag: !!tag, byline: [l.author, tag].filter(Boolean).join(', ') }; };
+const EMPTY_LETTER = {id:0,topic:'',school:'',year:'',author:'',title:'',pull:'Letters are on their way.',paras:[]};
+const TOPICS = ['Academics','Career','Money','Belonging','Relationships','Health','Others'];
+const ABOUT = [
+ ['What it is','Letters to Lions is a student-run space where Columbia students can share and read supportive letters from one another. Written by students, alumni, and community members, these letters serve as a reminder that you are not alone and sometimes it helps to hear from someone who’s been there.'],
+ ['Who it\'s for','Primarily, these letters are for incoming Columbia freshmen. But anyone in the Columbia community is welcome to read them.'],
+ ['Why it exists','Supported by Columbia University’s Mental Health Initiative, Letters to Lions capture student perspectives on mental health. We hope it encourages students to share their lived experience and take an active role in caring for themselves and one another.'],
+ ['What we value','Individual care\nOffer students accessible resources for self-reflection and self-care, supporting personal resilience and well-being.\nPeer connection\nCreate space for students to share experiences, learn from one another, and offer mutual support.\nCommunity care\nBuild belonging through shared stories and collective care, making mental health support a visible part of campus life.']
+];
+const RES = [
+ {title:'On-Campus Support',sub:'Columbia services available to all students.',items:[
+  ['Counseling and Psychological Services (CPS)','Free, confidential mental health support for Columbia students.','(212) 854-2878','https://www.health.columbia.edu/content/individual-counseling'],
+  ['Columbia Health','Primary care, wellness programs, immunizations, and health education.','(212) 854-2284','https://health.columbia.edu'],
+  ['Disability Services','Accommodations and support for students with documented disabilities.','','https://health.columbia.edu/content/disability-services']]},
+ {title:'Academic Support',sub:'Help with coursework, writing, advising, and academic skills.',items:[
+  ['Columbia Writing Center','Free one-on-one writing consultations for any assignment.','','https://www.college.columbia.edu/core-curriculum/undergraduate-writing-program/writing-center'],
+  ['Academic Resource Center','Tutoring, study groups, academic coaching, and workshops.','','https://www.gs.columbia.edu/content/academic-resource-center']]},
+ {title:'Community & Belonging',sub:'Spaces and organizations that help you find your people.',items:[
+  ['Multicultural Affairs','Cultural programming, identity-based support, and community building.','','https://studentaffairs.columbia.edu/multicultural-affairs'],
+  ['International Students and Scholars Office (ISSO)','Immigration advising, programming, and support for international students.','','https://isso.columbia.edu'],
+  ['Columbia Chaplain\'s Office','Interfaith programming and spiritual advising for all faiths and none.','','https://ouc.columbia.edu/']]},
+ {title:'Crisis & Urgent Support',sub:'If you or someone you know needs immediate help.',note:'If you are in immediate danger, call 911 or Columbia Public Safety at (212) 854-5555.',items:[
+  ['988 Suicide & Crisis Lifeline','Call or text 988, available 24/7.','988','https://988lifeline.org'],
+  ['Columbia Same Day Care','Drop-in services and same-day support.','(212) 854-2878','https://www.health.columbia.edu/content/same-day-care'],
+  ['Columbia Public Safety','24/7 campus safety and emergency response.','(212) 854-5555','https://publicsafety.columbia.edu'],
+  ['Crisis Text Line','Text HOME to 741741 for free, 24/7 crisis support.','Text HOME to 741741','https://www.crisistextline.org']]}
+];
+const SHEET_URL = ''; // paste Google Apps Script web-app URL here
+const EMPTY_FORM = { title: '', letter: '', topic: '', name: '', school: '', classYear: '' };
+const CLASS_YEARS = (() => { const y = new Date().getFullYear(); return Array.from({ length: 71 }, (_, i) => String(y + 35 - i)); })();
+class Component extends DCLogic {
+  featuredIdx = Math.floor(Math.random() * Math.max(LETTERS.length, 1));
+  state = { page: 'home', topic: 'All', openId: null, form: { ...EMPTY_FORM }, sent: false, errors: {}, votes: {} };
+  vote(helped) {
+    const l = LETTERS.find(x => x.id === this.state.openId); if (!l) return;
+    this.setState(s => ({ votes: { ...s.votes, [l.id]: helped } }));
+    // Feedback row: timestamp | type | letterId | letterTitle | helped
+    const row = { timestamp: new Date().toISOString(), type: 'feedback', letterId: l.id, letterTitle: l.title, helped: helped ? 'Yes' : 'No' };
+    if (SHEET_URL) fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(row) }).catch(() => {});
+  }
+  aboutList() {
+    return ABOUT.map(([title, body], i) => {
+      const lines = body.split('\n'), values = [];
+      if (lines.length > 1) for (let j = 0; j < lines.length; j += 2) values.push({ name: lines[j], desc: lines[j + 1] || '' });
+      return { num: '0' + (i + 1), title, body, values, hasValues: values.length > 0 };
+    });
+  }
+  setField(k, v) { this.setState(s => ({ form: { ...s.form, [k]: v }, errors: { ...s.errors, [k]: '' } })); }
+  submit(e) {
+    e.preventDefault();
+    const f = this.state.form;
+    const errors = { title: f.title.trim() ? '' : 'Please add a title.', letter: f.letter.trim() ? '' : 'Please write your letter.', topic: f.topic ? '' : 'Please choose a topic.' };
+    if (errors.title || errors.letter || errors.topic) { this.setState({ errors }); return; }
+    // Columns: timestamp | type | title | topic | name | school | classYear | letter
+    const row = { timestamp: new Date().toISOString(), type: 'letter', title: f.title.trim(), topic: f.topic, name: f.name.trim(), school: f.school, classYear: f.classYear, letter: f.letter.trim() };
+    if (SHEET_URL) fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(row) }).catch(() => {});
+    this.setState({ sent: true });
+  }
+  componentDidMount() {
+    this._key = e => {
+      if (this.state.openId == null) return;
+      if (e.key === 'Escape') this.setState({ openId: null });
+      if (e.key === 'ArrowRight') this.step(1);
+      if (e.key === 'ArrowLeft') this.step(-1);
+    };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._key); }
+  go(page, topic) { this.setState({ page, topic: topic || 'All', openId: null }); window.scrollTo(0, 0); }
+  step(d) {
+    if (!LETTERS.length) return;
+    const i = LETTERS.findIndex(l => l.id === this.state.openId);
+    this.setState({ openId: LETTERS[(i + d + LETTERS.length) % LETTERS.length].id });
+  }
+  card(l) {
+    const words = l.paras.join(' ').split(' ').length;
+    return { ...norm(l), excerpt: l.paras[0], mins: Math.max(1, Math.round(words / 200)), open: () => this.setState({ openId: l.id }) };
+  }
+  renderVals() {
+    const { page, topic, openId } = this.state;
+    const cols = this.props.gridColumns ?? 3;
+    const filtered = LETTERS.filter(l => topic === 'All' || l.topic === topic).map(l => this.card(l));
+    const open = LETTERS.find(l => l.id === openId);
+    const lined = this.props.paperLines ?? true;
+    return {
+      isHome: page === 'home', isLetters: page === 'letters', isAbout: page === 'about', isResources: page === 'resources',
+      isSubmit: page === 'submit', sent: this.state.sent, notSent: !this.state.sent,
+      form: this.state.form, errors: this.state.errors,
+      voted: (this.state.votes || {})[this.state.openId] !== undefined, notVoted: (this.state.votes || {})[this.state.openId] === undefined,
+      voteYes: () => this.vote(true), voteNo: () => this.vote(false),
+      border: Object.fromEntries(['title','letter','topic'].map(k => [k, this.state.errors[k] ? '#A23B2A' : '#B9D9EB'])),
+      onTitle: e => this.setField('title', e.target.value), onTopic: e => this.setField('topic', e.target.value), formTopics: TOPICS,
+      titlePh: this.state.focus === 'title' ? '' : 'Give it a title',
+      letterPh: this.state.focus === 'letter' ? '' : 'Write your letter…',
+      focusTitle: () => this.setState({ focus: 'title' }), focusLetter: () => this.setState({ focus: 'letter' }),
+      blurField: () => this.setState({ focus: null }),
+      classYears: CLASS_YEARS,
+      onLetter: e => this.setField('letter', e.target.value), onName: e => this.setField('name', e.target.value),
+      onSchool: e => this.setField('school', e.target.value), onClass: e => this.setField('classYear', e.target.value),
+      submit: e => this.submit(e), resetForm: () => this.setState({ sent: false, form: { ...EMPTY_FORM }, errors: {} }),
+      navItems: [['home','Home'],['letters','Read More'],['submit','Write a Letter'],['about','About'],['resources','Find Help']].map(([k, label]) => ({
+        label, go: () => this.go(k), bg: page === k ? '#DCEBF5' : 'transparent', color: page === k ? '#0E2C55' : '#33496A' })),
+      goHome: () => this.go('home'), goLetters: () => this.go('letters'), goAbout: () => this.go('about'),
+      hasLetters: LETTERS.length > 0, noneFiltered: filtered.length === 0, featured: norm(LETTERS[this.featuredIdx] || EMPTY_LETTER), openFeatured: () => LETTERS.length && this.setState({ openId: LETTERS[this.featuredIdx].id }),
+      openRandom: e => { e && e.stopPropagation && e.stopPropagation(); if (LETTERS.length < 2) return; let r; do { r = LETTERS[Math.floor(Math.random() * LETTERS.length)].id; } while (r === openId); this.setState({ openId: r }); },
+      moodChips: TOPICS.map(t => ({ label: t, count: LETTERS.filter(l => l.topic === t).length, go: () => this.go('letters', t) })),
+      recent: LETTERS.slice(1, 4).map(l => this.card(l)),
+      letterCount: LETTERS.length,
+      filterChips: ['All', ...TOPICS].map(t => ({ label: t, go: () => this.setState({ topic: t }),
+        bg: topic === t ? '#0E2C55' : '#fff', color: topic === t ? '#fff' : '#0E2C55', border: topic === t ? '#0E2C55' : '#B9D9EB' })),
+      filtered, filteredLabel: (topic === 'All' ? 'All letters' : topic) + ' · ' + filtered.length + (filtered.length === 1 ? ' letter' : ' letters'),
+      gridCols: `repeat(auto-fill,minmax(min(100%,${cols >= 4 ? 260 : cols === 2 ? 440 : 320}px),1fr))`,
+      ...(() => { const items = this.aboutList(); const vb = items.find(a => a.hasValues); return { aboutBasics: items.filter(a => !a.hasValues), valuesBlock: vb || { values: [] }, hasValuesBlock: !!vb }; })(),
+      aboutItems: ABOUT.map(([title, body], i) => {
+        const lines = body.split('\n'), values = [];
+        if (lines.length > 1) for (let j = 0; j < lines.length; j += 2) values.push({ name: lines[j], desc: lines[j + 1] || '' });
+        return { num: title ? '0' + (i + 1) : '', title, body, values, hasValues: values.length > 0, plain: values.length === 0 };
+      }),
+      resourceGroups: RES.map(g => ({ ...g, note: g.note || '', items: g.items.map(([name, desc, phone, href]) => ({ name, desc, phone, href })) })),
+      hasOpen: !!open, open: norm(open || EMPTY_LETTER),
+      close: () => this.setState({ openId: null }), stop: e => e.stopPropagation(),
+      prev: () => this.step(-1), next: () => this.step(1),
+      paperBg: lined ? '#FFFFFF repeating-linear-gradient(to bottom, transparent 0, transparent 33px, #EAF2F8 33px, #EAF2F8 34px)' : '#FFFFFF'
+    };
+  }
+}
+</script>
+</body>
+</html>

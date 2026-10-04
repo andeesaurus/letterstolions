@@ -1,0 +1,39 @@
+{
+  "intro": "College life can be overwhelming, and sometimes the most helpful thing is hearing from someone who's been there.",
+  "sections": [
+    {
+      "num": "01",
+      "title": "What it is",
+      "body": "Letters to Lions is a student-run space where Columbia students can share and read supportive letters from one another. Written by students, alumni, and community members, these letters serve as a reminder that you are not alone and sometimes it helps to hear from someone who’s been there."
+    },
+    {
+      "num": "02",
+      "title": "Who it's for",
+      "body": "Primarily, these letters are for incoming Columbia freshmen. But anyone in the Columbia community is welcome to read them."
+    },
+    {
+      "num": "03",
+      "title": "Why it exists",
+      "body": "Supported by Columbia University’s Mental Health Initiative, Letters to Lions capture student perspectives on mental health. We hope it encourages students to share their lived experience and take an active role in caring for themselves and one another."
+    }
+  ],
+  "values": {
+    "num": "04",
+    "title": "What we value",
+    "items": [
+      {
+        "name": "Individual care",
+        "desc": "Offer students accessible resources for self-reflection and self-care, supporting personal resilience and well-being."
+      },
+      {
+        "name": "Peer connection",
+        "desc": "Create space for students to share experiences, learn from one another, and offer mutual support."
+      },
+      {
+        "name": "Community care",
+        "desc": "Build belonging through shared stories and collective care, making mental health support a visible part of campus life."
+      }
+    ]
+  },
+  "importantNote": "Letters to Lions is a peer support platform, not a crisis service. If you are experiencing a mental health emergency, please contact Columbia Counseling and Psychological Services at **(212) 854-2878** or call **988** (Suicide & Crisis Lifeline). If you are in immediate danger, call **911** or Columbia Public Safety at **(212) 854-5555**."
+}

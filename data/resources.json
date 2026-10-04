@@ -1,0 +1,98 @@
+[
+  {
+    "title": "On-Campus Support",
+    "note": "",
+    "items": [
+      {
+        "name": "Counseling and Psychological Services (CPS)",
+        "desc": "Free, confidential mental health support for Columbia students.",
+        "phone": "(212) 854-2878",
+        "href": "https://www.health.columbia.edu/content/individual-counseling"
+      },
+      {
+        "name": "Columbia Health",
+        "desc": "Primary care, wellness programs, immunizations, and health education.",
+        "phone": "(212) 854-2284",
+        "href": "https://health.columbia.edu"
+      },
+      {
+        "name": "Disability Services",
+        "desc": "Accommodations and support for students with documented disabilities.",
+        "phone": "",
+        "href": "https://health.columbia.edu/content/disability-services"
+      }
+    ]
+  },
+  {
+    "title": "Academic Support",
+    "note": "",
+    "items": [
+      {
+        "name": "Columbia Writing Center",
+        "desc": "Free one-on-one writing consultations for any assignment.",
+        "phone": "",
+        "href": "https://www.college.columbia.edu/core-curriculum/undergraduate-writing-program/writing-center"
+      },
+      {
+        "name": "Academic Resource Center",
+        "desc": "Tutoring, study groups, academic coaching, and workshops.",
+        "phone": "",
+        "href": "https://www.gs.columbia.edu/content/academic-resource-center"
+      }
+    ]
+  },
+  {
+    "title": "Community & Belonging",
+    "note": "",
+    "items": [
+      {
+        "name": "Multicultural Affairs",
+        "desc": "Cultural programming, identity-based support, and community building.",
+        "phone": "",
+        "href": "https://studentaffairs.columbia.edu/multicultural-affairs"
+      },
+      {
+        "name": "International Students and Scholars Office (ISSO)",
+        "desc": "Immigration advising, programming, and support for international students.",
+        "phone": "",
+        "href": "https://isso.columbia.edu"
+      },
+      {
+        "name": "Columbia Chaplain's Office",
+        "desc": "Interfaith programming and spiritual advising for all faiths and none.",
+        "phone": "",
+        "href": "https://ouc.columbia.edu/"
+      }
+    ]
+  },
+  {
+    "title": "Crisis & Urgent Support",
+    "note": "If you are in immediate danger, call 911 or Columbia Public Safety at (212) 854-5555.",
+    "items": [
+      {
+        "name": "988 Suicide & Crisis Lifeline",
+        "desc": "Call or text 988, available 24/7.",
+        "phone": "988",
+        "href": "https://988lifeline.org"
+      },
+      {
+        "name": "Columbia Same Day Care",
+        "desc": "Drop-in services and same-day support.",
+        "phone": "(212) 854-2878",
+        "href": "https://www.health.columbia.edu/content/same-day-care"
+      },
+      {
+        "name": "Columbia Public Safety",
+        "desc": "24/7 campus safety and emergency response.",
+        "phone": "(212) 854-5555",
+        "href": "https://publicsafety.columbia.edu"
+      },
+      {
+        "name": "Crisis Text Line",
+        "desc": "Text HOME to 741741 for free, 24/7 crisis support.",
+        "phone": "Text HOME to 741741",
+        "href": "https://www.crisistextline.org"
+      }
+    ]
+  }
+]
