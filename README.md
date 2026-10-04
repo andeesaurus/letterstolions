@@ -59,11 +59,11 @@ You can edit everything in the GitHub web editor (open the file and click ✏️
 
 ## Letter length
 
-Letters must be **50–300 words** (max 3,000 characters). The form shows a live word counter.
+Titles: max **60 characters**. Letters: **50–300 words** (max 3,000 characters). The form shows a live word counter.
 
 Limits live in two places. Change both together:
-- Site: `WORD_MIN`, `WORD_MAX`, `LETTER_MAX_CHARS` in `config.js`
-- Sheet: `WORD_MIN`, `WORD_MAX`, `LIMITS.letter` in `apps-script/Code.gs` (then redeploy, see `apps-script/README.md`)
+- Site: `TITLE_MAX_CHARS`, `WORD_MIN`, `WORD_MAX`, `LETTER_MAX_CHARS` in `config.js`
+- Sheet: `LIMITS.title`, `WORD_MIN`, `WORD_MAX`, `LIMITS.letter` in `apps-script/Code.gs` (then redeploy, see `apps-script/README.md`)
 
 ## URLs
 

@@ -7,6 +7,7 @@
   const WORD_MIN = CONFIG.WORD_MIN || 50;
   const WORD_MAX = CONFIG.WORD_MAX || 300;
   const LETTER_MAX_CHARS = CONFIG.LETTER_MAX_CHARS || 3000;
+  const TITLE_MAX_CHARS = CONFIG.TITLE_MAX_CHARS || 60;
   const NAV = [
     ['home', '#/', 'Home'],
     ['letters', '#/letters', 'Read More'],
@@ -199,7 +200,8 @@
       <h1 class="h1">Write a Letter</h1>
       <p class="intro">${intro}</p>
       <form class="form" novalidate>
-        ${field('title', 'Title', `<input name="title" type="text" maxlength="100" placeholder="Give it a title" value="${esc(f.title)}" aria-describedby="err-title">`)}
+        ${field('title', 'Title', `<input name="title" type="text" maxlength="${TITLE_MAX_CHARS}" placeholder="Give it a title" value="${esc(f.title)}" aria-describedby="err-title title-count">
+          <span class="word-count" id="title-count" aria-live="polite">${f.title.length} / ${TITLE_MAX_CHARS} characters</span>`)}
         ${field('letter', 'Letter', `<textarea name="letter" rows="10" maxlength="${LETTER_MAX_CHARS}" placeholder="Write your letter…" aria-describedby="err-letter word-count">${esc(f.letter)}</textarea>
           <span class="word-count${counterBad(f.letter) ? ' bad' : ''}" id="word-count" aria-live="polite">${counterText(f.letter)}</span>`)}
         ${field('topic', 'Topic', `<select name="topic" aria-describedby="err-topic">${opts(state.topics, f.topic)}</select>`, 'topic')}
@@ -432,6 +434,7 @@
     if (!el.name || !(el.name in state.form)) return;
     state.form[el.name] = el.value;
     if (el.name === 'letter') updateCounter(el);
+    if (el.name === 'title') main.querySelector('#title-count').textContent = `${el.value.length} / ${TITLE_MAX_CHARS} characters`;
     if (state.errors[el.name]) {
       state.errors[el.name] = '';
       const field = el.closest('.field');

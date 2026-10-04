@@ -32,7 +32,7 @@ const TABS = {
     cols: ['timestamp', 'letterId', 'letterTitle', 'helped'],
   },
 };
-const LIMITS = { title: 100, name: 60, letter: 3000, letterTitle: 200, letterId: 40 };
+const LIMITS = { title: 60, name: 60, letter: 3000, letterTitle: 200, letterId: 40 };
 const WORD_MIN = 50;
 const WORD_MAX = 300;
 const CACHE_KEY = 'approved-letters';
