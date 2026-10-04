@@ -43,9 +43,6 @@
     const tag = [l.school, l.year ? "'" + l.year : ''].filter(Boolean).join(' ');
     return { ...l, greeting: l.greeting || 'Dear Lion,', tag, byline: [l.author, tag].filter(Boolean).join(', ') };
   }
-  function minutes(l) {
-    return Math.max(1, Math.round(l.paras.join(' ').split(/\s+/).length / 200));
-  }
   function route() {
     const r = (location.hash.replace(/^#\/?/, '').split(/[/?]/)[0] || 'home');
     return NAV.some(n => n[0] === r) ? r : 'home';
@@ -156,7 +153,7 @@
           <div class="top"><span class="pill">${esc(l.topic)}</span>${l.tag ? `<span class="tag">${esc(l.tag)}</span>` : ''}</div>
           <h3>${esc(l.title)}</h3>
           <p>${esc(l.paras[0] || '')}</p>
-          <div class="meta"><span>— ${esc(l.author)}</span><span>${minutes(l)} min read</span></div>
+          <div class="meta"><span>— ${esc(l.author)}</span></div>
         </button>`; }).join('')}
       </div>
     </section>`;
