@@ -306,7 +306,7 @@ main { flex: 1; }
   .write { padding-block: 32px 72px; gap: 16px; }
   .h1 { font-size: 40px; }
   .intro { font-size: 18px; }
-  .hero { padding-block: 20px 48px; gap: 28px; }
+  .hero { padding-block: 32px 48px; gap: 28px; }
   .hero h1 { font-size: 40px; }
   .hero .sub { margin-top: 14px; font-size: 17px; }
   .hero .cta { margin-top: 18px; }
