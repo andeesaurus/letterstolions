@@ -87,13 +87,6 @@ main { flex: 1; }
   .values { padding-bottom: 32px; border-bottom: 2px solid var(--action); }
   .nav a { padding: 12px 14px; font-size: 17px; }
 
-  /* Smaller page titles, less space above, so more fits on screen */
-  .page-title { padding-block: 32px 24px; gap: 16px; }
-  .write { padding-block: 32px 72px; gap: 16px; }
-  .h1 { font-size: 40px; }
-  .intro { font-size: 18px; }
-  .hero { padding-block: 36px 64px; gap: 40px; }
-  .hero h1 { font-size: 48px; }
 }
 
 /* ---------- Footer ---------- */
@@ -156,7 +149,7 @@ main { flex: 1; }
 .stamp span span { display: block; white-space: nowrap; }
 .stack .greeting { margin: 18px 0 0; font-family: var(--serif); font-size: 19px; color: var(--muted); }
 .stack .pull {
-  margin: 12px 0 0; font-family: var(--serif); font-size: 26px; line-height: 1.3; color: var(--ink);
+  margin: 18px 0 0; font-family: var(--serif); font-size: 26px; line-height: 1.3; color: var(--ink);
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden;
 }
 .stack .bottom { margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--text-2); }
@@ -304,4 +297,23 @@ main { flex: 1; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- Mobile layout (kept last so it overrides the rules above) ---------- */
+@media (max-width: 640px) {
+  /* Smaller page titles, less space above, so more fits on screen */
+  .page-title { padding-block: 32px 24px; gap: 16px; }
+  .write { padding-block: 32px 72px; gap: 16px; }
+  .h1 { font-size: 40px; }
+  .intro { font-size: 18px; }
+  .hero { padding-block: 20px 48px; gap: 28px; }
+  .hero h1 { font-size: 40px; }
+  .hero .sub { margin-top: 14px; font-size: 17px; }
+  .hero .cta { margin-top: 18px; }
+  /* Shorter letter card so the whole preview fits on the first screen */
+  .stack { height: 300px; }
+  .stack .front { padding: 26px 26px; }
+  .stack .greeting { font-size: 17px; }
+  .stack .pull { font-size: 21px; -webkit-line-clamp: 4; }
+  .stack .bottom { font-size: 14px; }
 }
