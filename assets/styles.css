@@ -319,4 +319,8 @@ main { flex: 1; }
   .stack .greeting { font-size: 17px; }
   .stack .pull { font-size: 21px; -webkit-line-clamp: 4; }
   .stack .bottom { font-size: 14px; }
+  /* Greeting stays at the top; the quote sits midway between the greeting and the name/Read row */
+  .stack .front > .greeting { margin-bottom: 12px; }
+  .stack .pull { margin-top: auto; margin-bottom: auto; }
+  .stack .bottom { margin-top: 0; padding-top: 12px; }
 }
