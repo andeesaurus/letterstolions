@@ -80,6 +80,6 @@ Each post gets its own subfolder in your Drive folder, named `YYYY-MM-DD_<id>_<T
 
 **Tuning:** if text spills out of the box, lower `IG_CHARS_PER_LINE` or `IG_FIRST_LINES` / `IG_NEXT_LINES` at the top of the file. If pages end short, raise them.
 
-**Un-approving:** setting a letter back to `pending` or `rejected` moves its post folder to the Drive **trash** (recoverable for 30 days) and clears the `post` cell. Folders for deleted rows are trashed by `cleanUpPosts`, which runs daily at about 4am (or run it by hand). Only folders this script created are ever touched.
+**Un-approving:** setting a letter back to `pending` or `rejected` moves its post folder to the Drive **trash** (recoverable for 30 days) and clears the `post` cell. Deleting a letter's row also trashes its folder right away. A daily cleanup at about 4am catches anything missed; you can also run `cleanUpPosts` by hand. Only folders this script created are ever touched.
 
 **Redo a post:** set status to `pending`, then back to `approved`. Or run `exportRow(5)` in the editor, where 5 is the sheet row. If something fails, the `post` cell shows `ERROR: …`.

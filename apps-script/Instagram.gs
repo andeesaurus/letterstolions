@@ -10,7 +10,7 @@
  * Status stays "approved" so the letter stays on the website.
  *
  * A letter gets a post only once. Setting status back to pending/rejected moves its folder to the Drive trash
- * (recoverable for 30 days); approving again makes a fresh post. Deleted rows are cleaned up daily by cleanUpPosts.
+ * (recoverable for 30 days); approving again makes a fresh post. Deleting a row trashes its folder too.
  * Or run  exportRow(5)  from the editor (5 = sheet row number).
  *
  * TEMPLATE (2 slides):
@@ -48,9 +48,10 @@ function setupInstagram() {
   DriveApp.getFolderById(IG_FOLDER_ID); // checks access to the folder
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   ScriptApp.getProjectTriggers()
-    .filter(t => ['onApproveForInstagram', 'onStatusEdit', 'cleanUpPosts'].indexOf(t.getHandlerFunction()) >= 0)
+    .filter(t => ['onApproveForInstagram', 'onStatusEdit', 'cleanUpPosts', 'onSheetChange'].indexOf(t.getHandlerFunction()) >= 0)
     .forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('onApproveForInstagram').forSpreadsheet(ss).onEdit().create();
+  ScriptApp.newTrigger('onSheetChange').forSpreadsheet(ss).onChange().create();
   ScriptApp.newTrigger('cleanUpPosts').timeBased().everyDays(1).atHour(4).create();
   postColumn(ss.getSheetByName(TABS.letter.name));
 }
@@ -82,9 +83,14 @@ function trashPost(sheet, row) {
   cell.clearContent();
 }
 
+/** Installable onChange trigger: a deleted row trashes its post folder right away. */
+function onSheetChange(e) {
+  if (e && e.changeType === 'REMOVE_ROW') cleanUpPosts();
+}
+
 /**
  * Trashes post folders whose letter is no longer approved — including letters whose row was deleted
- * (deleting a row can't be detected the moment it happens). Runs daily; can also be run by hand.
+ * Runs when a row is deleted, daily as a backup, or by hand.
  */
 function cleanUpPosts() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TABS.letter.name);
