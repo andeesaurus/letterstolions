@@ -163,7 +163,7 @@ main { flex: 1; }
 }
 .letter {
   max-width: 680px; margin: 0 auto; border-radius: 6px; position: relative;
-  background: #fff repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--paper-line) 33px, var(--paper-line) 34px);
+  background: #fff;
   box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .5);
   padding: clamp(32px, 6vw, 64px);
   animation: ltlFade .35s ease;
@@ -175,10 +175,16 @@ main { flex: 1; }
 }
 .letter .close:hover { background: var(--tint); }
 .letter h2 { margin: 28px 0 0; padding-right: 40px; font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4vw, 42px); line-height: 1.12; letter-spacing: -0.015em; color: var(--ink); text-wrap: pretty; }
-.letter .body { margin-top: 28px; font-family: var(--serif); font-size: 21px; line-height: 1.6; color: var(--letter); }
-.letter .body p { margin: 0 0 18px; }
+/* Ruled paper: every text line is exactly one 34px rule tall, so the text sits on the lines. */
+.letter .body {
+  --rule: 34px;
+  margin-top: 28px; font-family: var(--serif); font-size: 21px; line-height: var(--rule); color: var(--letter);
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--rule) - 1px), var(--paper-line) calc(var(--rule) - 1px), var(--paper-line) var(--rule));
+  background-position: 0 var(--rule-shift, -5px);
+}
+.letter .body p { margin: 0 0 var(--rule); }
 .letter .body .greeting { color: var(--muted); }
-.letter .body .sign { margin: 28px 0 0; font-style: italic; }
+.letter .body .sign { margin: 0; font-style: italic; }
 .letter .another { display: block; margin: 44px auto 0; padding: 11px 18px; width: 205px; height: 44px; font-size: 15px; font-weight: 500; }
 .feedback { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: 12px; font-size: 16px; color: var(--text-2); }
 .feedback .row { display: flex; gap: 10px; }
