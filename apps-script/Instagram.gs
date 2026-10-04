@@ -69,6 +69,21 @@ function onApproveForInstagram(e) {
 
 // ---- Export ----------------------------------------------------------------------
 
+/**
+ * Manual test: click any cell in a letter's row in the sheet, then run this from the editor.
+ * Clears that row's "post" cell and makes the post again; errors show up in the execution log.
+ */
+function exportSelectedRow() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TABS.letter.name);
+  const row = sheet.getActiveRange() ? sheet.getActiveRange().getRow() : 0;
+  if (row < 2) throw new Error('Click a cell in a letter row on the Letters tab first.');
+  sheet.getRange(row, postColumn(sheet)).clearContent();
+  exportRow(row);
+  const result = String(sheet.getRange(row, postColumn(sheet)).getValue());
+  if (result.indexOf('ERROR') === 0) throw new Error(result);
+  console.log('Done: ' + result);
+}
+
 /** Makes the carousel for one sheet row. Can also be run by hand: exportRow(5). */
 function exportRow(row) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TABS.letter.name);
