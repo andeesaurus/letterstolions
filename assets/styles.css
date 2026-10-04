@@ -202,6 +202,8 @@ main { flex: 1; }
 .field select { padding: 10px 12px; line-height: normal; }
 .field textarea { resize: vertical; min-height: 220px; }
 .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--error); }
+.word-count { font-size: 14px; color: var(--muted); }
+.word-count.bad { color: var(--error); }
 .field .error { font-size: 14px; color: var(--error); }
 .field .error:empty { display: none; }
 .optional-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 16px; }

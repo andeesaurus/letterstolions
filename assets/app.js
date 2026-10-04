@@ -2,7 +2,11 @@
 (function () {
   'use strict';
 
-  const SHEET_URL = ((window.LTL_CONFIG || {}).SHEET_URL || '').trim();
+  const CONFIG = window.LTL_CONFIG || {};
+  const SHEET_URL = (CONFIG.SHEET_URL || '').trim();
+  const WORD_MIN = CONFIG.WORD_MIN || 50;
+  const WORD_MAX = CONFIG.WORD_MAX || 300;
+  const LETTER_MAX_CHARS = CONFIG.LETTER_MAX_CHARS || 3000;
   const NAV = [
     ['home', '#/', 'Home'],
     ['letters', '#/letters', 'Read More'],
@@ -12,13 +16,12 @@
   ];
   const SCHOOLS = ['CC', 'SEAS', 'BC', 'GS', 'Other'];
   const EMPTY_FORM = { title: '', letter: '', topic: '', name: '', school: '', classYear: '', website: '' };
-  const MIN_WORDS = 50;
-  const ERRORS = { title: 'Please add a title.', letter: 'Please write your letter.', topic: 'Please choose a topic.' };
+  const ERRORS = { title: 'Please add a title.', letter: 'Please write your letter.', short: `Minimum word count is ${WORD_MIN}.`, long: `Please keep your letter under ${WORD_MAX} words.`, topic: 'Please choose a topic.' };
 
   const state = {
     letters: [], topics: [], about: null, resources: [],
     featuredId: null, topic: 'All', openId: null,
-    form: { ...EMPTY_FORM }, errors: {}, submitting: false, sent: false, submitError: '',
+    form: { ...EMPTY_FORM }, errors: {}, attempted: false, submitting: false, sent: false, submitError: '',
     votes: readVotes(),
   };
 
@@ -197,7 +200,8 @@
       <p class="intro">${intro}</p>
       <form class="form" novalidate>
         ${field('title', 'Title', `<input name="title" type="text" maxlength="100" placeholder="Give it a title" value="${esc(f.title)}" aria-describedby="err-title">`)}
-        ${field('letter', 'Letter', `<textarea name="letter" rows="10" maxlength="10000" placeholder="Write your letter…" aria-describedby="err-letter">${esc(f.letter)}</textarea>`)}
+        ${field('letter', 'Letter', `<textarea name="letter" rows="10" maxlength="${LETTER_MAX_CHARS}" placeholder="Write your letter…" aria-describedby="err-letter word-count">${esc(f.letter)}</textarea>
+          <span class="word-count${counterBad(f.letter) ? ' bad' : ''}" id="word-count" aria-live="polite">${counterText(f.letter)}</span>`)}
         ${field('topic', 'Topic', `<select name="topic" aria-describedby="err-topic">${opts(state.topics, f.topic)}</select>`, 'topic')}
         <div class="optional-row">
           <label class="field"><span class="label">Name <span class="opt">(optional)</span></span>
@@ -343,15 +347,34 @@
   function validate() {
     const f = state.form, e = {};
     if (!f.title.trim()) e.title = ERRORS.title;
-    const words = f.letter.trim().split(/\s+/).filter(Boolean).length;
+    const words = countWords(f.letter);
     if (!words) e.letter = ERRORS.letter;
-    else if (words < MIN_WORDS) e.letter = `Minimum word count is ${MIN_WORDS}. You have ${words}.`;
+    else if (words < WORD_MIN) e.letter = ERRORS.short;
+    else if (words > WORD_MAX) e.letter = ERRORS.long;
     if (!f.topic) e.topic = ERRORS.topic;
     return e;
   }
 
+  function countWords(s) {
+    return s.trim().split(/\s+/).filter(Boolean).length;
+  }
+  function counterText(s) {
+    return `${countWords(s)} / ${WORD_MAX} words`;
+  }
+  function counterBad(s) {
+    const n = countWords(s);
+    return n > WORD_MAX || (state.attempted && n < WORD_MIN);
+  }
+  function updateCounter(el) {
+    const c = main.querySelector('#word-count');
+    if (!c) return;
+    c.textContent = counterText(el.value);
+    c.classList.toggle('bad', counterBad(el.value));
+  }
+
   function submit() {
     if (state.submitting) return;
+    state.attempted = true;
     state.errors = validate();
     state.submitError = '';
     const firstBad = ['title', 'letter', 'topic'].find(k => state.errors[k]);
@@ -370,6 +393,7 @@
     }).then(() => {
       state.submitting = false;
       state.sent = true;
+      state.attempted = false;
       state.form = { ...EMPTY_FORM };
       render();
       window.scrollTo(0, 0);
@@ -400,13 +424,14 @@
       if (a.classList.contains('overlay') && t.closest('.letter')) return;
       closeLetter();
     } else if (action === 'next') step(1);
-    else if (action === 'reset') { state.sent = false; state.form = { ...EMPTY_FORM }; state.errors = {}; render(); }
+    else if (action === 'reset') { state.sent = false; state.form = { ...EMPTY_FORM }; state.errors = {}; state.attempted = false; render(); }
   });
 
   main.addEventListener('input', e => {
     const el = e.target;
     if (!el.name || !(el.name in state.form)) return;
     state.form[el.name] = el.value;
+    if (el.name === 'letter') updateCounter(el);
     if (state.errors[el.name]) {
       state.errors[el.name] = '';
       const field = el.closest('.field');

@@ -57,6 +57,14 @@ You can edit everything in the GitHub web editor (open the file and click ✏️
   Most letters won't need this, because approving a submission in the Google Sheet publishes it automatically.
 - **About / Find Help copy:** edit `data/about.json` / `data/resources.json`. In the About note, `**text**` makes text bold.
 
+## Letter length
+
+Letters must be **50–300 words** (max 3,000 characters). The form shows a live word counter.
+
+Limits live in two places. Change both together:
+- Site: `WORD_MIN`, `WORD_MAX`, `LETTER_MAX_CHARS` in `config.js`
+- Sheet: `WORD_MIN`, `WORD_MAX`, `LIMITS.letter` in `apps-script/Code.gs` (then redeploy, see `apps-script/README.md`)
+
 ## URLs
 
 Pages use hash links that work on GitHub Pages without extra setup: `#/`, `#/letters`, `#/write`, `#/about`, `#/help`.

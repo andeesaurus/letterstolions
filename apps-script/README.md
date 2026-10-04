@@ -56,6 +56,6 @@ If you change `Code.gs`, go to **Deploy → Manage deployments → ✏️ Edit �
 
 ## Notes
 
-- **Security:** the web-app URL is public by design, since the browser needs it. The script only accepts the two kinds of rows above, checks required fields and topic, trims lengths, and prefixes anything that starts like a spreadsheet formula (`=`, `+`, `-`, `@`) so it can't run. A hidden "honeypot" field silently drops most spam bots.
+- **Security:** the web-app URL is public by design, since the browser needs it. The script only accepts the two kinds of rows above, checks required fields and topic, rejects letters outside **50–300 words** (`WORD_MIN` / `WORD_MAX`), caps letters at 3,000 characters (`LIMITS.letter`), trims other lengths, and prefixes anything that starts like a spreadsheet formula (`=`, `+`, `-`, `@`) so it can't run. A hidden "honeypot" field silently drops most spam bots.
 - **Why "no-cors":** Apps Script can't answer browser CORS preflight requests, so the site posts as `text/plain` with `mode: 'no-cors'`. The site can't read the reply, so it shows "Letter sent" once the request goes through, and an error message if the network request fails.
 - The Letters tab is matched **by header name**, so you can reorder columns or add your own (e.g. `notes`) without breaking anything. Just don't rename the existing headers.
