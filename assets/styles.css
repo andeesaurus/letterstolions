@@ -202,10 +202,13 @@ main { flex: 1; }
 .field select { padding: 10px 12px; line-height: normal; }
 .field textarea { resize: vertical; min-height: 220px; }
 .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--error); }
-.word-count { align-self: flex-end; font-size: 14px; color: var(--muted); }
+.field-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.field-foot:empty { display: none; }
+.word-count { margin-left: auto; font-size: 14px; color: var(--muted); white-space: nowrap; }
 .word-count.bad { color: var(--error); }
 .field .error { font-size: 14px; color: var(--error); }
 .field .error:empty { display: none; }
+.field-foot:not(:has(.word-count)):has(.error:empty) { display: none; }
 .optional-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 16px; }
 .optional-row .field { gap: 6px; }
 .helper { margin: -8px 0 0; font-size: 15px; color: var(--muted); }

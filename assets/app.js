@@ -189,21 +189,24 @@
     const years = Array.from({ length: 71 }, (_, i) => String(year + 35 - i)).concat('Other');
     const opts = (list, val) => '<option value="">Select</option>' +
       list.map(o => `<option value="${esc(o)}"${o === val ? ' selected' : ''}>${esc(o)}</option>`).join('');
-    const field = (k, label, control, cls) => `
+    const field = (k, label, control, cls, counter) => `
       <label class="field ${cls || ''} ${e[k] ? 'invalid' : ''}" data-field="${k}">
         <span class="label">${label}</span>
         ${control}
-        <span class="error" id="err-${k}" aria-live="polite">${esc(e[k] || '')}</span>
+        <span class="field-foot">
+          <span class="error" id="err-${k}" aria-live="polite">${esc(e[k] || '')}</span>
+          ${counter || ''}
+        </span>
       </label>`;
     return `
     <section class="wrap write">
       <h1 class="h1">Write a Letter</h1>
       <p class="intro">${intro}</p>
       <form class="form" novalidate>
-        ${field('title', 'Title', `<input name="title" type="text" maxlength="${TITLE_MAX_CHARS}" placeholder="Give it a title" value="${esc(f.title)}" aria-describedby="err-title title-count">
-          <span class="word-count" id="title-count" aria-live="polite">${f.title.length} / ${TITLE_MAX_CHARS} characters</span>`)}
-        ${field('letter', 'Letter', `<textarea name="letter" rows="10" maxlength="${LETTER_MAX_CHARS}" placeholder="Write your letter…" aria-describedby="err-letter word-count">${esc(f.letter)}</textarea>
-          <span class="word-count${counterBad(f.letter) ? ' bad' : ''}" id="word-count" aria-live="polite">${counterText(f.letter)}</span>`)}
+        ${field('title', 'Title', `<input name="title" type="text" maxlength="${TITLE_MAX_CHARS}" placeholder="Give it a title" value="${esc(f.title)}" aria-describedby="err-title title-count">`, '',
+          `<span class="word-count" id="title-count" aria-live="polite">${f.title.length} / ${TITLE_MAX_CHARS}</span>`)}
+        ${field('letter', 'Letter', `<textarea name="letter" rows="10" maxlength="${LETTER_MAX_CHARS}" placeholder="Write your letter…" aria-describedby="err-letter word-count">${esc(f.letter)}</textarea>`, '',
+          `<span class="word-count${counterBad(f.letter) ? ' bad' : ''}" id="word-count" aria-live="polite">${counterText(f.letter)}</span>`)}
         ${field('topic', 'Topic', `<select name="topic" aria-describedby="err-topic">${opts(state.topics, f.topic)}</select>`, 'topic')}
         <div class="optional-row">
           <label class="field"><span class="label">Name <span class="opt">(optional)</span></span>
@@ -434,7 +437,7 @@
     if (!el.name || !(el.name in state.form)) return;
     state.form[el.name] = el.value;
     if (el.name === 'letter') updateCounter(el);
-    if (el.name === 'title') main.querySelector('#title-count').textContent = `${el.value.length} / ${TITLE_MAX_CHARS} characters`;
+    if (el.name === 'title') main.querySelector('#title-count').textContent = `${el.value.length} / ${TITLE_MAX_CHARS}`;
     if (state.errors[el.name]) {
       state.errors[el.name] = '';
       const field = el.closest('.field');
