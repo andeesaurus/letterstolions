@@ -300,7 +300,6 @@
     const html = cls => NAV.map(([k, href, label]) =>
       `<a href="${href}"${cls && k === r ? ' aria-current="page"' : ''}>${label}</a>`).join('');
     document.querySelector('[data-nav]').innerHTML = html(true);
-    document.querySelector('[data-footer-nav]').innerHTML = html(false);
   }
 
   // Mobile hamburger menu
