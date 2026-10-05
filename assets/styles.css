@@ -310,6 +310,8 @@ main { flex: 1; }
   .intro { font-size: 18px; }
   /* Same 32px gap between the page intro and the content on every page */
   .about, .help { padding-top: 8px; }
+  /* About: same 40px gap between every section as between 01, 02 and 03 */
+  .values, .note { margin-top: 40px; }
   .form, .sent { margin-top: 16px; }
   .hero { padding-block: 32px 48px; gap: 28px; }
   .hero h1 { font-size: 40px; }
