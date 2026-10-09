@@ -141,7 +141,7 @@
     return `
     <section class="wrap hero">
       <div>
-        <h1>You're <em>not</em><br><em>alone</em> in this.</h1>
+        <h1>For the first weeks,<br><em>the hard days</em></h1>
         <p class="sub">Letters from Columbia students and alumni to incoming freshmen.</p>
         <div class="cta"><a class="link-btn" href="#/letters">Read More Letters →</a></div>
       </div>
