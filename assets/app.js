@@ -315,6 +315,29 @@
   document.addEventListener('click', e => { if (!e.target.closest('.site-header')) setMenu(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && navEl.classList.contains('open')) { setMenu(false); menuBtn.focus(); } });
 
+  // Footer email popover: shows the address with Copy / Gmail / Mail app
+  const EMAIL = 'culetterstolions@gmail.com';
+  const emailBtn = document.querySelector('[data-email]');
+  const emailPop = document.getElementById('email-pop');
+  function setEmailPop(open) {
+    emailPop.hidden = !open;
+    emailBtn.setAttribute('aria-expanded', String(open));
+  }
+  emailBtn.addEventListener('click', () => setEmailPop(emailPop.hidden));
+  document.addEventListener('click', e => { if (!e.target.closest('.email-wrap')) setEmailPop(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !emailPop.hidden) { setEmailPop(false); emailBtn.focus(); } });
+  emailPop.querySelector('[data-copy-email]').addEventListener('click', e => {
+    const btn = e.currentTarget;
+    const done = () => { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1600); };
+    const fallback = () => {
+      const r = document.createRange(); r.selectNodeContents(emailPop.querySelector('.email-addr'));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      try { if (document.execCommand('copy')) done(); } catch (err) { /* address stays selected for manual copy */ }
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(EMAIL).then(done, fallback);
+    else fallback();
+  });
+
   function render() {
     const r = route();
     renderNav(r);
